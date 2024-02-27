@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -63,6 +65,12 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("com.google.firebase:firebase-crashlytics:18.6.2")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation ("com.firebaseui:firebase-ui-auth:7.2.0")
+    implementation("com.facebook.android:facebook-android-sdk:8.2.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+
     ksp("androidx.room:room-compiler:2.6.1")
 
     testImplementation("junit:junit:4.13.2")

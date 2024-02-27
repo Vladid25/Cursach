@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "229113945262",
+    "project_id": "drivetracker-ecf96",
+    "storage_bucket": "drivetracker-ecf96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229113945262:android:5b229132f3f7bcc685a13f",
+        "android_client_info": {
+          "package_name": "com.example.drivetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229113945262-6emthb2tf49emfmjqjstbpc60p3t1hbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drivetracker",
+            "certificate_hash": "54f8744c36d43656fa37c1ad541195c5c12afdda"
+          }
+        },
+        {
+          "client_id": "229113945262-8vpf9utavm6nddm99dis2mmpavv6om0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnXsWN3hQTZJGbRA3UgfxCDMHINYjzfSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229113945262-8vpf9utavm6nddm99dis2mmpavv6om0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
