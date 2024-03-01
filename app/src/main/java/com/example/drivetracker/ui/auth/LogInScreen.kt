@@ -29,10 +29,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LogInScreen(
-    onSignInClick: ()->Unit
+    onSignInClick: ()->Unit,
+    auth:FirebaseAuth,
+    onLogInClick: ()->Unit
 ){
     Surface(modifier = Modifier
         .fillMaxSize()) {
@@ -44,11 +47,11 @@ fun LogInScreen(
                     text = "Log in",
                     modifier = Modifier.padding(bottom = 75.dp),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-                var loginText by remember { mutableStateOf(TextFieldValue()) }
+                var emailText by remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(
-                    value = loginText,
+                    value = emailText,
                     onValueChange = {
-                        loginText = it
+                        emailText = it
                     },
                     label={
                         Text(text = "Enter email")
@@ -74,16 +77,16 @@ fun LogInScreen(
                     },
                     maxLines = 1,
                 )
-                Button(onClick = {
-                    /* auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
-                         if(it.isSuccessful){
-                             auth.signOut()
-                         } else {
-                             Log.e("", it.exception.toString())
-                         }
-                     } */},
-                    modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)
-                ) {
+                Button(
+                    onClick ={
+                        auth.signInWithEmailAndPassword(emailText.text, password).addOnCompleteListener{
+                            if(it.isSuccessful){
+                                auth.signOut()
+                                onLogInClick.invoke()
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)) {
                     Text("Log in")
                 }
                 Text(
@@ -103,5 +106,5 @@ fun LogInScreen(
 @Preview
 @Composable
 fun PreviewLogInScreen(){
-    LogInScreen({})
+    //LogInScreen({})
 }

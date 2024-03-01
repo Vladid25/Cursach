@@ -1,5 +1,6 @@
 package com.example.drivetracker.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,14 +31,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-
-
-//var auth = Firebase.auth
 
 @Composable
 fun SignInScreen(
-    onLogInClick:() -> Unit
+    onLogInClick:() -> Unit,
+    auth:FirebaseAuth
 ){
     Surface(modifier = Modifier
         .fillMaxSize()) {
@@ -117,13 +117,13 @@ fun SignInScreen(
 
                 Button(onClick = {
                      isError = password2!=password
-                   /* auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
+                    auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
                         if(it.isSuccessful){
                             auth.signOut()
                         } else {
                             Log.e("", it.exception.toString())
                         }
-                    } */},
+                    } },
                     modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)
                 ) {
                     Text("Sign up")
@@ -145,5 +145,5 @@ fun SignInScreen(
 @Preview
 @Composable
 fun PreviewSignInScreen(){
-    SignInScreen({})
+    //SignInScreen({})
 }
