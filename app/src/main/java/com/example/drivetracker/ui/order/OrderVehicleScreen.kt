@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.sharp.AccountCircle
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,16 +40,24 @@ import com.example.drivetracker.data.entity.Car
 fun OrderVehicleScreen(){
     Surface(modifier = Modifier.fillMaxSize()) {
         val car = Car(0,"AUDI", "Q7", 2019, false, 4)
-        val list = listOf(car, car, car, car,car, car, car, car,car)
+        val list= mutableListOf(car)
+
+        for(i in 1..20){
+            list.add(car)
+        }
         Column(Modifier.fillMaxSize()) {
             TopVehicleBar()
-            LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 100.dp)) {
-                items(list){item ->
-                    DisplayCar(item)
+            Column {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 100.dp)) {
+                    items(list){item ->
+                        DisplayCar(item)
+                    }
                 }
             }
-            BottomAppBarWithThreeSections()
+
         }
+        BottomAppBarWithThreeSections()
 
     }
 }
@@ -80,30 +89,37 @@ fun TopVehicleBar(){
     }
 }
 
+
 @Composable
 fun BottomAppBarWithThreeSections(
     modifier: Modifier = Modifier
 ) {
-    Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
-        ) {
-            IconButton(onClick = { /* Handle action */ }) {
-                Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
-            }
-            IconButton(onClick = { /* Handle action */ }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Home")
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        BottomAppBar {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                IconButton(onClick = { /* Handle action */ }) {
+                    Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
+                }
+                IconButton(onClick = { /* Handle action */ }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Home")
 
-            }
-            IconButton(onClick = { /* Handle action */ }) {
-                Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Home")
+                }
+                IconButton(onClick = { /* Handle action */ }) {
+                    Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Home")
+                }
             }
         }
     }
+
 }
 
 @Composable
