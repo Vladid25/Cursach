@@ -2,6 +2,7 @@
 
 package com.example.drivetracker.ui.order
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.sharp.AccountCircle
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -34,10 +36,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.drivetracker.data.entity.Car
+import com.example.drivetracker.model.OrderVehicleUiState
+import com.example.drivetracker.ui.RentWheelsScreen
+import com.example.drivetracker.ui.adding.AddCarScreen
+import com.example.drivetracker.ui.auth.LogInScreen
+import com.example.drivetracker.ui.auth.SignInScreen
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
-fun OrderVehicleScreen(){
+fun OrderVehicleScreen(
+    navHostController: NavHostController,
+    viewModel: OrderVehicleViewModel = OrderVehicleViewModel()
+){
     Surface(modifier = Modifier.fillMaxSize()) {
         val car = Car(0,"AUDI", "Q7", 2019, false, 4)
         val list= mutableListOf(car)
@@ -46,7 +63,7 @@ fun OrderVehicleScreen(){
             list.add(car)
         }
         Column(Modifier.fillMaxSize()) {
-            TopVehicleBar()
+            TopVehicleBar(viewModel)
             Column {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 100.dp)) {
@@ -57,19 +74,15 @@ fun OrderVehicleScreen(){
             }
 
         }
-        BottomAppBarWithThreeSections()
+        BottomAppBarWithThreeSections(navHostController)
 
     }
 }
 
-@Preview
 @Composable
-fun PreviewOrderVehicleScreen(){
-    OrderVehicleScreen()
-}
-
-@Composable
-fun TopVehicleBar(){
+fun TopVehicleBar(
+    viewModel: OrderVehicleViewModel
+){
     Column(verticalArrangement = Arrangement.Top) {
         val tabs = listOf("Cars","Trucks")
         var selectedTabIndex by remember {
@@ -81,7 +94,10 @@ fun TopVehicleBar(){
             tabs.forEachIndexed { index, text ->
                 Tab(
                     selected = selectedTabIndex == index,
-                    onClick = { selectedTabIndex=index },
+                    onClick = {
+                        selectedTabIndex = index
+                        viewModel.changeVehicle(selectedTabIndex)
+                              },
                     text = { Text(text) }
                 )
             }
@@ -92,10 +108,10 @@ fun TopVehicleBar(){
 
 @Composable
 fun BottomAppBarWithThreeSections(
-    modifier: Modifier = Modifier
+    navHostController: NavHostController
 ) {
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {
         BottomAppBar {
@@ -109,7 +125,7 @@ fun BottomAppBarWithThreeSections(
                 IconButton(onClick = { /* Handle action */ }) {
                     Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
                 }
-                IconButton(onClick = { /* Handle action */ }) {
+                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.AddCar.name) }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Home")
 
                 }
@@ -124,8 +140,8 @@ fun BottomAppBarWithThreeSections(
 
 @Composable
 fun DisplayCar(car:Car){
-    Card(onClick = {}) {
-        Column(Modifier.padding(20.dp)) {
+    Card(modifier = Modifier.padding(15.dp)) {
+        Column(Modifier.padding(10.dp)) {
             Text(text = car.brand)
             Text(text = car.model)
             Text(text = car.year.toString())

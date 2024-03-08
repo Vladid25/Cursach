@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.drivetracker.ui.adding.AddCarScreen
 import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
@@ -47,7 +48,11 @@ fun DriveTrackerApp(
         }
 
         composable(route = RentWheelsScreen.OrderVehicles.name){
-            OrderVehicleScreen()
+            OrderVehicleScreen(navHostController)
+        }
+
+        composable(route = RentWheelsScreen.AddCar.name){
+            AddCarScreen()
         }
     }
 
@@ -57,5 +62,6 @@ enum class RentWheelsScreen{
     SignIn,
     LogIn,
     OrderVehicles,
-    MyVehicles
+    MyVehicles,
+    AddCar
 }
