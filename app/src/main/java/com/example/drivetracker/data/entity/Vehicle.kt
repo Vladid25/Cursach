@@ -1,7 +1,6 @@
 package com.example.drivetracker.data.entity
 
 abstract class Vehicle(
-    open val id:Int,
     open val brand: String,
     open val model:String,
     open val year:Int,

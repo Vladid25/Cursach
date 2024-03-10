@@ -65,6 +65,7 @@ fun TopVehicleBar(
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
     }
+    viewModel.changeVehicle(selectedTabIndex)
     TabRow(
         selectedTabIndex = selectedTabIndex
     ) {
@@ -74,7 +75,6 @@ fun TopVehicleBar(
                 onClick = {
                     selectedTabIndex = index
                     viewModel.changeVehicle(selectedTabIndex)
-                    Log.e("M", "Turn $selectedTabIndex")
                 },
                 text = { Text(text) }
             )

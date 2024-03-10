@@ -13,6 +13,10 @@ class OrderVehicleViewModel:ViewModel() {
     private val _uiState = MutableStateFlow(OrderVehicleUiState())
     val uiState:StateFlow<OrderVehicleUiState> = _uiState.asStateFlow()
 
+    private var carList = mutableListOf<Car>()
+    private var truckList = mutableListOf<Truck>()
+
+
     fun changeVehicle(index: Int){
         _uiState.update { currentState ->
             currentState.copy(isTruck = index!=0)
@@ -20,22 +24,20 @@ class OrderVehicleViewModel:ViewModel() {
     }
 
     fun getCars(): MutableList<Car> {
-        val car = Car(0,"AUDI", "Q7", 2019, false, 4)
-        val list= mutableListOf(car)
-
-        for(i in 1..20){
-            list.add(car)
-        }
-        return list
+        return carList
     }
 
     fun getTrucks(): MutableList<Truck>{
-        val trucks = Truck(0,"Bugr", "Q7", 2019, false, 182364.3)
-        val list= mutableListOf(trucks)
-
-        for(i in 1..20){
-            list.add(trucks)
-        }
-        return list
+        return truckList
     }
+
+    fun addCar(car: Car){
+        carList.add(car)
+    }
+
+    fun addTruck(truck: Truck){
+        truckList.add(truck)
+    }
+
+
 }
