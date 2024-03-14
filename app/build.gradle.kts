@@ -70,6 +70,8 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation("com.facebook.android:facebook-android-sdk:8.2.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("io.coil-kt:coil-compose:1.4.0")
+
 
     ksp("androidx.room:room-compiler:2.6.1")
 

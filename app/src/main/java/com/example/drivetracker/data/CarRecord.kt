@@ -6,6 +6,7 @@ import java.util.Date
 class CarRecord (
     val car: Car,
     val photoUrl: String?=null,
-    val rating: Double,
-    val uploadDate: Date
+    val rating: Double=0.0,
+    val uploadDate: Date,
+    val rented:Boolean = false
 )

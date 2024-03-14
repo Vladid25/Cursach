@@ -7,6 +7,6 @@ data class Car(
     override val brand: String = "",
     override val model:String = "",
     override val year:Int = 0,
-    override var rented: Boolean = false,
-    val numberSeats: Int = 0
-): Vehicle(brand, model, year, rented)
+    val numberSeats: Int = 0,
+    val maxSpeed: Double = 0.0
+): Vehicle(brand, model, year)

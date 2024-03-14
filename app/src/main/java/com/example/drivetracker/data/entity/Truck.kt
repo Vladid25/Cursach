@@ -7,6 +7,5 @@ class Truck(
     override val brand: String,
     override val model: String,
     override val year: Int,
-    override var rented: Boolean,
     val cargoCapacity: Double
-): Vehicle(brand, model, year, rented)
+): Vehicle(brand, model, year)
