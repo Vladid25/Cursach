@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.data.entity.Truck
 import com.example.drivetracker.model.OrderVehicleUiState
@@ -33,7 +34,7 @@ import com.example.drivetracker.ui.RentWheelsScreen
 @Composable
 fun OrderVehicleScreen(
     navHostController: NavHostController,
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel() }
+    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Surface(modifier = Modifier.fillMaxSize()) {

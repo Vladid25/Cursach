@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.adding.AddCarScreen
 import com.example.drivetracker.ui.auth.LogInScreen
@@ -23,7 +24,7 @@ import com.google.firebase.database.database
 @Composable
 fun DriveTrackerApp(
     navHostController: NavHostController = rememberNavController(),
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel() }
+    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) }
 ){
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val currentScreen = RentWheelsScreen.valueOf(

@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 data class Car(
-    override val brand: String,
-    override val model:String,
-    override val year:Int,
-    override var rented: Boolean,
-    val numberSeats: Int
+    override val brand: String = "",
+    override val model:String = "",
+    override val year:Int = 0,
+    override var rented: Boolean = false,
+    val numberSeats: Int = 0
 ): Vehicle(brand, model, year, rented)
