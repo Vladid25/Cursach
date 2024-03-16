@@ -73,6 +73,8 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:1.4.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-storage")
+    implementation ("com.google.firebase:firebase-appcheck:17.1.2")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
 
 
     ksp("androidx.room:room-compiler:2.6.1")

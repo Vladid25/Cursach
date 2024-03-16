@@ -125,7 +125,6 @@ fun DisplayCar(carRecord: CarRecord) {
             .fillMaxWidth()
     ) {
         Column(Modifier.padding(10.dp)) {
-            Image(painter = rememberImagePainter(carRecord.photoUrl), contentDescription = "car")
             Text(text = carRecord.car.brand)
             Text(text = carRecord.car.model)
             Text(text = carRecord.car.year.toString())

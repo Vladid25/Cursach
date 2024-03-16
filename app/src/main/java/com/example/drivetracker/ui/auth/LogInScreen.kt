@@ -81,7 +81,6 @@ fun LogInScreen(
                     onClick ={
                         auth.signInWithEmailAndPassword(emailText.text, password).addOnCompleteListener{
                             if(it.isSuccessful){
-                                auth.signOut()
                                 onLogInClick.invoke()
                             }
                         }

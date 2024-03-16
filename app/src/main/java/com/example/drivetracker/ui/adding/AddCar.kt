@@ -45,6 +45,7 @@ import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.storage
 import java.io.InputStream
@@ -56,16 +57,6 @@ fun AddCarScreen(
     navHostController: NavHostController
 ){
     val db = FirebaseDatabase.getInstance("https://drivetracker-ecf96-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Cars")
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val imageActivityResult = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            selectedImageUri = data?.data
-            Log.e("m", selectedImageUri.toString())
-        }
-    }
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -133,13 +124,6 @@ fun AddCarScreen(
             )
 
             Button(onClick = {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                imageActivityResult.launch(intent)
-            }) {
-                Text(text = "Upload Image")
-            }
-
-            Button(onClick = {
                 if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && numSeatsText.text.isNotEmpty()) {
                     val car = Car(
                         brand = brandText.text,
@@ -149,8 +133,6 @@ fun AddCarScreen(
                         maxSpeed = maxSpeedText.text.toDouble(),
                     )
                     val carRecord = CarRecord(car, uploadDate = Date())
-                    selectedImageUri?.let { uploadImageToFirebaseStorage(uri = it, carRecord) }
-
                     val carId = db.push().key!!
                     db.child(carId).setValue(carRecord)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
@@ -159,50 +141,10 @@ fun AddCarScreen(
             ) {
                 Text(text = "Add")
             }
-            selectedImageUri?.let { uri ->
-                Image(
-                    painter = uriToPainter(uri),
-                    contentDescription = "Selected Image",
-                    Modifier.size(100.dp)
-                )
-            }
+
 
         }
     }
 
 
 }
-
-@Preview
-@Composable
-fun PreviewAddCarScreen(){
-    //AddCarScreen()
-}
-
-@Composable
-fun uriToPainter(uri: Uri): Painter {
-    return rememberImagePainter(uri)
-}
-
-fun uploadImageToFirebaseStorage(uri: Uri, carRecord: CarRecord) {
-    val storageRef = Firebase.storage.reference
-    val imageRef = storageRef.child("images/${uri.lastPathSegment}")
-
-    val uploadTask = imageRef.putFile(uri)
-
-    uploadTask.continueWithTask { task ->
-        if (!task.isSuccessful) {
-            task.exception?.let {
-                throw it
-            }
-        }
-        imageRef.downloadUrl
-    }.addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            carRecord.photoUrl = task.result.toString() // Get the download URL
-        } else {
-            // Handle failures
-        }
-    }
-}
-

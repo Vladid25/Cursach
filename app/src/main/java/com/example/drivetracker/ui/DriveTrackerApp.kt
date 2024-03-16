@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,9 +18,15 @@ import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.AppCheckProviderFactory
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
+import com.google.firebase.initialize
 
 @Composable
 fun DriveTrackerApp(
@@ -28,8 +35,13 @@ fun DriveTrackerApp(
 ){
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val currentScreen = RentWheelsScreen.valueOf(
-        backStackEntry?.destination?.route ?: RentWheelsScreen.SignIn.name
+        backStackEntry?.destination?.route ?: RentWheelsScreen.LogIn.name
     )
+    Firebase.initialize(context = LocalContext.current)
+    Firebase.appCheck.installAppCheckProviderFactory(
+        PlayIntegrityAppCheckProviderFactory.getInstance()
+    )
+
     var auth = Firebase.auth
     NavHost(
         navController = navHostController,
@@ -47,7 +59,7 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.LogIn.name){
             LogInScreen(
                 onSignInClick = {
-                navHostController.navigate(RentWheelsScreen.SignIn.name)
+                    navHostController.navigate(RentWheelsScreen.SignIn.name)
                 },
                 auth=auth,
                 onLogInClick = {
