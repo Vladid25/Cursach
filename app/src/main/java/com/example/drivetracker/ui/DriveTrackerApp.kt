@@ -28,7 +28,7 @@ fun DriveTrackerApp(
 ){
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val currentScreen = RentWheelsScreen.valueOf(
-        backStackEntry?.destination?.route ?: RentWheelsScreen.OrderVehicles.name
+        backStackEntry?.destination?.route ?: RentWheelsScreen.SignIn.name
     )
     var auth = Firebase.auth
     NavHost(

@@ -44,7 +44,9 @@ import com.example.drivetracker.data.CarRecord
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import com.google.firebase.Firebase
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.storage
 import java.io.InputStream
 import java.util.Date
 
@@ -137,8 +139,6 @@ fun AddCarScreen(
                 Text(text = "Upload Image")
             }
 
-
-
             Button(onClick = {
                 if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && numSeatsText.text.isNotEmpty()) {
                     val car = Car(
@@ -148,20 +148,14 @@ fun AddCarScreen(
                         numberSeats = numSeatsText.text.toInt(),
                         maxSpeed = maxSpeedText.text.toDouble(),
                     )
-                    val carRecord = CarRecord(car, photoUrl = selectedImageUri.toString(), uploadDate = Date())
-                    viewModel.addCar(car)
+                    val carRecord = CarRecord(car, uploadDate = Date())
+                    selectedImageUri?.let { uploadImageToFirebaseStorage(uri = it, carRecord) }
+
                     val carId = db.push().key!!
                     db.child(carId).setValue(carRecord)
-                        .addOnCompleteListener {
-                            Log.e("M", "YRAAA")
-                        }
-                        .addOnFailureListener {
-                            Log.e("M", "NOOOOO"+ it.message)
-                        }
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
             }
-
             ) {
                 Text(text = "Add")
             }
@@ -189,3 +183,26 @@ fun PreviewAddCarScreen(){
 fun uriToPainter(uri: Uri): Painter {
     return rememberImagePainter(uri)
 }
+
+fun uploadImageToFirebaseStorage(uri: Uri, carRecord: CarRecord) {
+    val storageRef = Firebase.storage.reference
+    val imageRef = storageRef.child("images/${uri.lastPathSegment}")
+
+    val uploadTask = imageRef.putFile(uri)
+
+    uploadTask.continueWithTask { task ->
+        if (!task.isSuccessful) {
+            task.exception?.let {
+                throw it
+            }
+        }
+        imageRef.downloadUrl
+    }.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            carRecord.photoUrl = task.result.toString() // Get the download URL
+        } else {
+            // Handle failures
+        }
+    }
+}
+

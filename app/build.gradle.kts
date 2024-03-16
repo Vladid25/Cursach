@@ -71,6 +71,8 @@ dependencies {
     implementation("com.facebook.android:facebook-android-sdk:8.2.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation ("io.coil-kt:coil-compose:1.4.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-storage")
 
 
     ksp("androidx.room:room-compiler:2.6.1")

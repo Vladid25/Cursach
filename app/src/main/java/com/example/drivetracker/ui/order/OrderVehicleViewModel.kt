@@ -1,6 +1,7 @@
 package com.example.drivetracker.ui.order
 
 import androidx.lifecycle.ViewModel
+import com.example.drivetracker.data.CarRecord
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.data.entity.Truck
@@ -17,7 +18,7 @@ class OrderVehicleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(OrderVehicleUiState())
     val uiState:StateFlow<OrderVehicleUiState> = _uiState.asStateFlow()
 
-    private var carList = mutableListOf<Car>()
+    private var carList = mutableListOf<CarRecord>()
     private var truckList = mutableListOf<Truck>()
 
     init {
@@ -41,7 +42,7 @@ class OrderVehicleViewModel @Inject constructor(
         }
     }
 
-    fun getCars(): MutableList<Car> {
+    fun getCars(): MutableList<CarRecord> {
         fetchCars()
         return carList
     }
@@ -49,14 +50,5 @@ class OrderVehicleViewModel @Inject constructor(
     fun getTrucks(): MutableList<Truck>{
         return truckList
     }
-
-    fun addCar(car: Car){
-        carList.add(car)
-    }
-
-    fun addTruck(truck: Truck){
-        truckList.add(truck)
-    }
-
 
 }
