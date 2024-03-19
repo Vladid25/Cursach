@@ -1,9 +1,7 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.drivetracker.ui.order
 
-import android.util.Log
-import androidx.compose.foundation.Image
+import android.widget.Button
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,18 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberImagePainter
 import com.example.drivetracker.data.CarRecord
+import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.data.entity.Truck
-import com.example.drivetracker.model.OrderVehicleUiState
 import com.example.drivetracker.ui.RentWheelsScreen
+import java.util.Date
 
 @Composable
 fun OrderVehicleScreen(
@@ -49,7 +46,7 @@ fun OrderVehicleScreen(
             ) {
                 if (uiState.isTruck) {
                     items(viewModel.getTrucks()) { truck ->
-                        DisplayTruck(truck = truck)
+                        DisplayTruck(truckRecord = truck)
                     }
                 } else {
                     items(viewModel.getCars()) { car ->
@@ -91,6 +88,8 @@ fun TopVehicleBar(
 fun BottomAppBarWithThreeSections(
     navHostController: NavHostController
 ) {
+    val dialogState = remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
@@ -106,7 +105,7 @@ fun BottomAppBarWithThreeSections(
                 IconButton(onClick = { /* Handle home action */ }) {
                     Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
                 }
-                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.AddCar.name) }) {
+                IconButton(onClick = { dialogState.value=true }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                 }
                 IconButton(onClick = { /* Handle account action */ }) {
@@ -115,6 +114,10 @@ fun BottomAppBarWithThreeSections(
             }
         }
     }
+    if(dialogState.value){
+        PopupWithButtons(onDismiss = {dialogState.value=false}, navHostController)
+    }
+
 }
 
 @Composable
@@ -124,24 +127,111 @@ fun DisplayCar(carRecord: CarRecord) {
             .padding(15.dp)
             .fillMaxWidth()
     ) {
-        Column(Modifier.padding(10.dp)) {
-            Text(text = carRecord.car.brand)
-            Text(text = carRecord.car.model)
-            Text(text = carRecord.car.year.toString())
-            Text(text = carRecord.car.numberSeats.toString())
+        Row(Modifier.fillMaxWidth()){
+            Row(
+                Modifier
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = carRecord.car.brand+" ",
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                )
+                Text(
+                    text = carRecord.car.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                )
 
+            }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(text = "Rating: ${carRecord.rating}")
+                    Text(text = carRecord.car.year.toString())
+                }
+
+            }
         }
+
     }
 }
 
 @Composable
-fun DisplayTruck(truck: Truck) {
-    Card(modifier = Modifier.padding(15.dp)) {
-        Column(Modifier.padding(10.dp)) {
-            Text(text = truck.brand)
-            Text(text = truck.model)
-            Text(text = truck.year.toString())
-            Text(text = truck.cargoCapacity.toString())
+fun DisplayTruck(truckRecord: TruckRecord) {
+    Card(
+        modifier = Modifier
+            .padding(15.dp)
+            .fillMaxWidth()
+    ) {
+        Row(Modifier.fillMaxWidth()){
+            Row(
+                Modifier
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = truckRecord.truck.brand+" ",
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                )
+                Text(
+                    text = truckRecord.truck.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                )
+
+            }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(text = "Rating: ${truckRecord.rating}")
+                    Text(text = truckRecord.truck.year.toString())
+                }
+
+            }
         }
+
     }
+}
+
+
+@Composable
+fun PopupWithButtons(
+    onDismiss:()->Unit,
+    navHostController: NavHostController
+) {
+    AlertDialog(
+        onDismissRequest =onDismiss,
+        confirmButton = { /*TODO*/ },
+        title = { Text(text = "Вибір") },
+        text = {
+            Column {
+                Text(text = "Виберіть тип транспорту:")
+                Button(onClick = { navHostController.navigate(RentWheelsScreen.AddCar.name) }) {
+                    Text(text = "Car")
+                }
+                Button(onClick = { navHostController.navigate(RentWheelsScreen.AddTruck.name) }) {
+                    Text(text = "Truck")
+                }
+            }
+               },
+        dismissButton = {
+            Button(onClick = onDismiss){
+                Text(text = "Back")
+            }
+        }
+    )
+}
+
+
+@Preview
+@Composable
+fun DisplayCarPreview(){
+    DisplayCar(carRecord = CarRecord(car=Car("Porsche", "911", 2024, 2, 340.2), uploadDate = Date()))
 }

@@ -27,4 +27,23 @@ class VehicleRepository(
             }
         })
     }
+
+    fun getTrucks(callback: (List<TruckRecord>?) -> Unit) {
+        val ref = firebase.getReference("Trucks")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val trucksList = mutableListOf<TruckRecord>()
+                for (carSnapshot in snapshot.children) {
+                    val car = carSnapshot.getValue(TruckRecord::class.java)
+                    car?.let { trucksList.add(it) }
+                }
+                callback(trucksList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
 }

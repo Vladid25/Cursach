@@ -41,7 +41,9 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import coil.size.PixelSize
 import com.example.drivetracker.data.CarRecord
+import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.entity.Car
+import com.example.drivetracker.data.entity.Truck
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.google.firebase.Firebase
@@ -52,11 +54,11 @@ import java.io.InputStream
 import java.util.Date
 
 @Composable
-fun AddCarScreen(
+fun AddTruckScreen(
     viewModel: OrderVehicleViewModel,
     navHostController: NavHostController
 ){
-    val db = FirebaseDatabase.getInstance("https://drivetracker-ecf96-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Cars")
+    val db = FirebaseDatabase.getInstance("https://drivetracker-ecf96-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Trucks")
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,11 +99,11 @@ fun AddCarScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
 
-            var numSeatsText by remember { mutableStateOf(TextFieldValue()) }
+            var cargoCapacity by remember { mutableStateOf(TextFieldValue()) }
             OutlinedTextField(
-                value = numSeatsText,
+                value = cargoCapacity,
                 onValueChange = {
-                    numSeatsText = it
+                    cargoCapacity = it
                 },
                 label={
                     Text(text = "Enter number of seats")
@@ -110,31 +112,17 @@ fun AddCarScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
 
-            var maxSpeedText by remember { mutableStateOf(TextFieldValue()) }
-            OutlinedTextField(
-                value = maxSpeedText,
-                onValueChange = {
-                    maxSpeedText = it
-                },
-                label={
-                    Text(text = "Enter max speed")
-                },
-                maxLines = 1,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-            )
-
             Button(onClick = {
-                if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && numSeatsText.text.isNotEmpty()) {
-                    val car = Car(
+                if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && cargoCapacity.text.isNotEmpty()) {
+                    val truck = Truck(
                         brand = brandText.text,
                         modelText.text,
                         yearText.text.toInt(),
-                        numberSeats = numSeatsText.text.toInt(),
-                        maxSpeed = maxSpeedText.text.toDouble(),
+                        cargoCapacity = cargoCapacity.text.toDouble()
                     )
-                    val carRecord = CarRecord(car, uploadDate = Date())
-                    val carId = db.push().key!!
-                    db.child(carId).setValue(carRecord)
+                    val truckRecord = TruckRecord(truck, uploadDate = Date())
+                    val truckId = db.push().key!!
+                    db.child(truckId).setValue(truckRecord)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
             }

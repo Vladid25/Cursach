@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.adding.AddCarScreen
+import com.example.drivetracker.ui.adding.AddTruckScreen
 import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
@@ -74,6 +75,9 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.AddCar.name){
             AddCarScreen(viewModel, navHostController)
         }
+        composable(route = RentWheelsScreen.AddTruck.name){
+            AddTruckScreen(viewModel, navHostController)
+        }
     }
 
 }
@@ -83,5 +87,6 @@ enum class RentWheelsScreen{
     LogIn,
     OrderVehicles,
     MyVehicles,
-    AddCar
+    AddCar,
+    AddTruck
 }
