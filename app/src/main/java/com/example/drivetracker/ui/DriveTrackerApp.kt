@@ -1,6 +1,5 @@
 package com.example.drivetracker.ui
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -11,22 +10,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.drivetracker.data.VehicleRepository
-import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.adding.AddCarScreen
 import com.example.drivetracker.ui.adding.AddTruckScreen
 import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
 import com.google.firebase.Firebase
-import com.google.firebase.FirebaseApp
-import com.google.firebase.appcheck.AppCheckProviderFactory
-import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.auth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.database
 import com.google.firebase.initialize
 
 @Composable
@@ -43,7 +37,7 @@ fun DriveTrackerApp(
         PlayIntegrityAppCheckProviderFactory.getInstance()
     )
 
-    var auth = Firebase.auth
+    val auth = Firebase.auth
     NavHost(
         navController = navHostController,
         startDestination = currentScreen.name
@@ -78,6 +72,8 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.AddTruck.name){
             AddTruckScreen(viewModel, navHostController)
         }
+        composable(route = RentWheelsScreen.CarDetails.name){
+        }
     }
 
 }
@@ -88,5 +84,6 @@ enum class RentWheelsScreen{
     OrderVehicles,
     MyVehicles,
     AddCar,
-    AddTruck
+    AddTruck,
+    CarDetails
 }

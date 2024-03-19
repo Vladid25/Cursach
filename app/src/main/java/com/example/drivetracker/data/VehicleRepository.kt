@@ -1,11 +1,9 @@
 package com.example.drivetracker.data
 
-import com.example.drivetracker.data.entity.Car
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
 
 class VehicleRepository(
     private val firebase: FirebaseDatabase = FirebaseDatabase
@@ -28,6 +26,12 @@ class VehicleRepository(
         })
     }
 
+    fun addCar(car:CarRecord){
+        val db = firebase.getReference("Cars")
+        val carId = db.push().key!!
+        db.child(carId).setValue(car)
+    }
+
     fun getTrucks(callback: (List<TruckRecord>?) -> Unit) {
         val ref = firebase.getReference("Trucks")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -44,6 +48,12 @@ class VehicleRepository(
                 callback(null)
             }
         })
+    }
+
+    fun addTruck(truck:TruckRecord){
+        val db = firebase.getReference("Trucks")
+        val truckId = db.push().key!!
+        db.child(truckId).setValue(truck)
     }
 
 }

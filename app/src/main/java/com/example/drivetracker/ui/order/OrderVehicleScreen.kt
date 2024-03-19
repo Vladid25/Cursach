@@ -1,7 +1,6 @@
 
 package com.example.drivetracker.ui.order
 
-import android.widget.Button
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -28,7 +26,6 @@ import com.example.drivetracker.data.CarRecord
 import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.entity.Car
-import com.example.drivetracker.data.entity.Truck
 import com.example.drivetracker.ui.RentWheelsScreen
 import java.util.Date
 
@@ -208,7 +205,7 @@ fun PopupWithButtons(
 ) {
     AlertDialog(
         onDismissRequest =onDismiss,
-        confirmButton = { /*TODO*/ },
+        confirmButton = {  },
         title = { Text(text = "Вибір") },
         text = {
             Column {
