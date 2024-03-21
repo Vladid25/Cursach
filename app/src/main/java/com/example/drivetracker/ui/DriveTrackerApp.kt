@@ -17,6 +17,8 @@ import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
+import com.example.drivetracker.ui.vehicleDetails.TruckDetailsScreen
+import com.example.drivetracker.ui.vehicleDetails.VehicleDetailsViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
@@ -36,7 +38,9 @@ fun DriveTrackerApp(
     Firebase.appCheck.installAppCheckProviderFactory(
         PlayIntegrityAppCheckProviderFactory.getInstance()
     )
-
+    val detailsViewModel = remember {
+        VehicleDetailsViewModel()
+    }
     val auth = Firebase.auth
     NavHost(
         navController = navHostController,
@@ -63,16 +67,38 @@ fun DriveTrackerApp(
         }
 
         composable(route = RentWheelsScreen.OrderVehicles.name){
-            OrderVehicleScreen(navHostController, viewModel)
+            OrderVehicleScreen(
+                navHostController,
+                viewModel,
+                onCarClicked = {
+                    detailsViewModel.setCar(it)
+                    navHostController.navigate(RentWheelsScreen.CarDetails.name)
+                },
+                onTruckClicked = {
+                    detailsViewModel.setTruck(it)
+                    navHostController.navigate(RentWheelsScreen.TruckDetails.name)
+                })
         }
 
         composable(route = RentWheelsScreen.AddCar.name){
             AddCarScreen(viewModel, navHostController)
         }
+
         composable(route = RentWheelsScreen.AddTruck.name){
             AddTruckScreen(viewModel, navHostController)
         }
+
         composable(route = RentWheelsScreen.CarDetails.name){
+            CarDetailsScreen(
+                viewModel = detailsViewModel,
+                navHostController = navHostController
+            )
+        }
+        composable(route = RentWheelsScreen.TruckDetails.name){
+            TruckDetailsScreen(
+                viewModel = detailsViewModel,
+                navHostController = navHostController
+            )
         }
     }
 
@@ -85,5 +111,6 @@ enum class RentWheelsScreen{
     MyVehicles,
     AddCar,
     AddTruck,
-    CarDetails
+    CarDetails,
+    TruckDetails
 }

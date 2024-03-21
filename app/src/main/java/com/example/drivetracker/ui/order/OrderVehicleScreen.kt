@@ -32,7 +32,9 @@ import java.util.Date
 @Composable
 fun OrderVehicleScreen(
     navHostController: NavHostController,
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) }
+    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) },
+    onCarClicked:(CarRecord)-> Unit,
+    onTruckClicked:(TruckRecord)->Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -43,11 +45,11 @@ fun OrderVehicleScreen(
             ) {
                 if (uiState.isTruck) {
                     items(viewModel.getTrucks()) { truck ->
-                        DisplayTruck(truckRecord = truck)
+                        DisplayTruck(truckRecord = truck, onTruckClicked)
                     }
                 } else {
                     items(viewModel.getCars()) { car ->
-                        DisplayCar(car)
+                        DisplayCar(car, onCarClicked)
                     }
                 }
             }
@@ -117,12 +119,16 @@ fun BottomAppBarWithThreeSections(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayCar(carRecord: CarRecord) {
+fun DisplayCar(carRecord: CarRecord, onCarClicked: (CarRecord) -> Unit) {
     Card(
         modifier = Modifier
             .padding(15.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        onClick = {
+            onCarClicked(carRecord)
+        }
     ) {
         Row(Modifier.fillMaxWidth()){
             Row(
@@ -157,12 +163,16 @@ fun DisplayCar(carRecord: CarRecord) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayTruck(truckRecord: TruckRecord) {
+fun DisplayTruck(truckRecord: TruckRecord, onTruckClicked: (TruckRecord) -> Unit) {
     Card(
         modifier = Modifier
             .padding(15.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        onClick = {
+            onTruckClicked(truckRecord)
+        }
     ) {
         Row(Modifier.fillMaxWidth()){
             Row(
@@ -230,5 +240,5 @@ fun PopupWithButtons(
 @Preview
 @Composable
 fun DisplayCarPreview(){
-    DisplayCar(carRecord = CarRecord(car=Car("Porsche", "911", 2024, 2, 340.2), uploadDate = Date()))
+    //DisplayCar(carRecord = CarRecord(car=Car("Porsche", "911", 2024, 2, 340.2), uploadDate = Date()))
 }

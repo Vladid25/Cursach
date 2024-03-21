@@ -15,19 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.example.drivetracker.data.CarRecord
-import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
-import java.util.Date
 
 @Composable
-fun CarDetailsScreen(
+fun TruckDetailsScreen(
     viewModel: VehicleDetailsViewModel,
     navHostController: NavHostController
 ){
-    val car = viewModel.getDisplayedCar()
+    val truck = viewModel.getDisplayedTruck()
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -38,29 +34,25 @@ fun CarDetailsScreen(
                 }
             }
             Text(
-                text = car.car.brand+" "+ car.car.model,
+                text = truck.truck.brand+" "+ truck.truck.model,
                 fontSize = MaterialTheme.typography.displayMedium.fontSize,
                 textAlign = TextAlign.Center,
                 modifier =  Modifier.fillMaxWidth()
             )
             Text(
-                text = "Рейтинг: " + car.rating,
+                text = "Рейтинг: " + truck.rating,
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(
-                text = "Рік випуску: " + car.car.year,
+                text = "Рік випуску: " + truck.truck.year,
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(
-                text = "Кількість місць: " + car.car.numberSeats,
+                text = "Кількість місць: " + truck.truck.cargoCapacity,
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(
-                text = "Макс. швидкість: " + car.car.maxSpeed,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize
-            )
-            Text(
-                text = "Дата додавання: " + car.uploadDate,
+                text = "Дата додавання: " + truck.uploadDate,
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize
             )
             Box(
@@ -76,8 +68,3 @@ fun CarDetailsScreen(
     }
 }
 
-@Preview
-@Composable
-fun CarDetailsScreenPreview(){
-    //CarDetailsScreen(car = CarRecord(car= Car("Porsche", "911", 2024, 2, 340.2), uploadDate = Date()))
-}
