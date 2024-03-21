@@ -64,12 +64,18 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("com.google.firebase:firebase-crashlytics:18.6.2")
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation ("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation("com.facebook.android:facebook-android-sdk:8.2.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("io.coil-kt:coil-compose:1.4.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-storage")
+    implementation ("com.google.firebase:firebase-appcheck:17.1.2")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+
 
     ksp("androidx.room:room-compiler:2.6.1")
 

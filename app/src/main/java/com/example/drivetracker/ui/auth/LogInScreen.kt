@@ -1,6 +1,5 @@
 package com.example.drivetracker.ui.auth
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,14 +29,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 
 @Composable
-fun SignInScreen(
-    onLogInClick:() -> Unit,
-    auth:FirebaseAuth
+fun LogInScreen(
+    onSignInClick: ()->Unit,
+    auth:FirebaseAuth,
+    onLogInClick: ()->Unit
 ){
     Surface(modifier = Modifier
         .fillMaxSize()) {
@@ -45,26 +43,20 @@ fun SignInScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 var password by rememberSaveable { mutableStateOf("") }
                 var passwordHidden1 by rememberSaveable { mutableStateOf(true) }
-                var isError by rememberSaveable {
-                    mutableStateOf(false)
-                }
                 Text(
-                    text = "Sign up",
+                    text = "Log in",
                     modifier = Modifier.padding(bottom = 75.dp),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize)
-                var loginText by remember { mutableStateOf(TextFieldValue()) }
+                var emailText by remember { mutableStateOf(TextFieldValue()) }
                 OutlinedTextField(
-                    value = loginText,
+                    value = emailText,
                     onValueChange = {
-                        loginText = it
+                        emailText = it
                     },
                     label={
                         Text(text = "Enter email")
                     },
-                    maxLines = 1,
-                    supportingText = {
-                        Text(text = if(isError) "Error" else "")
-                    },
+                    maxLines = 1
                 )
 
                 OutlinedTextField(
@@ -78,64 +70,32 @@ fun SignInScreen(
                     trailingIcon = {
                         IconButton(onClick = { passwordHidden1 = !passwordHidden1 }) {
                             val visibilityIcon =
-                              if (passwordHidden1) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                                if (passwordHidden1) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
                             val description = if (passwordHidden1) "Show password" else "Hide password"
-                             Icon(imageVector = visibilityIcon, contentDescription = description)
-                        }
-                    },
-                    supportingText = {
-                        Text(text = if(isError) "Error" else "")
-                    },
-                    maxLines = 1,
-                    isError = isError
-                )
-                var password2 by rememberSaveable { mutableStateOf("") }
-                var passwordHidden by rememberSaveable { mutableStateOf(true) }
-
-                OutlinedTextField(
-                    value = password2,
-                    onValueChange = { password2 = it },
-                    singleLine = true,
-                    label = { Text("Confirm password") },
-                    visualTransformation =
-                    if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    trailingIcon = {
-                        IconButton(onClick = { passwordHidden = !passwordHidden }) {
-                            val visibilityIcon =
-                                if (passwordHidden) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-                            val description = if (passwordHidden) "Show password" else "Hide password"
                             Icon(imageVector = visibilityIcon, contentDescription = description)
                         }
                     },
-                    supportingText = {
-                        Text(text = if(isError) "Error" else "")
-                    },
                     maxLines = 1,
-                    isError = isError
                 )
-
-                Button(onClick = {
-                     isError = password2!=password
-                    auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
-                        if(it.isSuccessful){
-                            auth.signOut()
-                        } else {
-                            Log.e("", it.exception.toString())
+                Button(
+                    onClick ={
+                        auth.signInWithEmailAndPassword(emailText.text, password).addOnCompleteListener{
+                            if(it.isSuccessful){
+                                onLogInClick.invoke()
+                            }
                         }
-                    } },
-                    modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)
-                ) {
-                    Text("Sign up")
+                    },
+                    modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)) {
+                    Text("Log in")
                 }
                 Text(
                     "or",
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     modifier = Modifier.padding(bottom = 25.dp)
                 )
-                Button(onClick = onLogInClick
+                Button(onClick = onSignInClick
                 ) {
-                    Text("Log in")
+                    Text("Sign up")
                 }
             }
         }
@@ -144,6 +104,6 @@ fun SignInScreen(
 
 @Preview
 @Composable
-fun PreviewSignInScreen(){
-    //SignInScreen({})
+fun PreviewLogInScreen(){
+    //LogInScreen({})
 }
