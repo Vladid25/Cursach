@@ -20,8 +20,6 @@ import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.TruckDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.VehicleDetailsViewModel
 import com.google.firebase.Firebase
-import com.google.firebase.appcheck.appCheck
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.auth
 import com.google.firebase.initialize
 
@@ -35,11 +33,13 @@ fun DriveTrackerApp(
         backStackEntry?.destination?.route ?: RentWheelsScreen.LogIn.name
     )
     Firebase.initialize(context = LocalContext.current)
-    Firebase.appCheck.installAppCheckProviderFactory(
-        PlayIntegrityAppCheckProviderFactory.getInstance()
-    )
+    val rep = VehicleRepository()
+
+    val orderViewModel = remember {
+        OrderVehicleViewModel(rep)
+    }
     val detailsViewModel = remember {
-        VehicleDetailsViewModel()
+        VehicleDetailsViewModel(rep)
     }
     val auth = Firebase.auth
     NavHost(
@@ -69,7 +69,7 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.OrderVehicles.name){
             OrderVehicleScreen(
                 navHostController,
-                viewModel,
+                orderViewModel,
                 onCarClicked = {
                     detailsViewModel.setCar(it)
                     navHostController.navigate(RentWheelsScreen.CarDetails.name)
@@ -81,23 +81,31 @@ fun DriveTrackerApp(
         }
 
         composable(route = RentWheelsScreen.AddCar.name){
-            AddCarScreen(viewModel, navHostController)
+            AddCarScreen(orderViewModel, navHostController)
         }
 
         composable(route = RentWheelsScreen.AddTruck.name){
-            AddTruckScreen(viewModel, navHostController)
+            AddTruckScreen(orderViewModel, navHostController)
         }
 
         composable(route = RentWheelsScreen.CarDetails.name){
             CarDetailsScreen(
                 viewModel = detailsViewModel,
-                navHostController = navHostController
+                navHostController = navHostController,
+                deleteCar = {
+                    detailsViewModel.deleteCar()
+                    navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
+                }
             )
         }
         composable(route = RentWheelsScreen.TruckDetails.name){
             TruckDetailsScreen(
                 viewModel = detailsViewModel,
-                navHostController = navHostController
+                navHostController = navHostController,
+                deleteTruck = {
+                    detailsViewModel.deleteTruck()
+                    navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
+                }
             )
         }
     }

@@ -61,7 +61,7 @@ class OrderVehicleViewModel @Inject constructor(
         return truckList
     }
 
-    fun addCar(car:CarRecord){
+    fun addCar(car: CarRecord){
         vehicleRepository.addCar(car)
     }
 

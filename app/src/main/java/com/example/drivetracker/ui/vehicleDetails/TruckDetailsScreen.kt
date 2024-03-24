@@ -1,7 +1,9 @@
 package com.example.drivetracker.ui.vehicleDetails
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -21,7 +23,8 @@ import com.example.drivetracker.ui.RentWheelsScreen
 @Composable
 fun TruckDetailsScreen(
     viewModel: VehicleDetailsViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    deleteTruck:()->Unit
 ){
     val truck = viewModel.getDisplayedTruck()
     Surface(
@@ -55,10 +58,13 @@ fun TruckDetailsScreen(
                 text = "Дата додавання: " + truck.uploadDate,
                 fontSize = MaterialTheme.typography.bodyLarge.fontSize
             )
-            Box(
-                contentAlignment = Alignment.BottomEnd,
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ){
+                Button(onClick = deleteTruck) {
+                    Text(text = "Видалити")
+                }
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Орендувати")
                 }

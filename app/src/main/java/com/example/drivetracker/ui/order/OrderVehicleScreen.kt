@@ -25,9 +25,7 @@ import androidx.navigation.NavHostController
 import com.example.drivetracker.data.CarRecord
 import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.VehicleRepository
-import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
-import java.util.Date
 
 @Composable
 fun OrderVehicleScreen(
