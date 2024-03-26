@@ -16,6 +16,7 @@ import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import com.example.drivetracker.ui.userInfo.UserInfoScreen
 import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.TruckDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.VehicleDetailsViewModel
@@ -26,7 +27,6 @@ import com.google.firebase.initialize
 @Composable
 fun DriveTrackerApp(
     navHostController: NavHostController = rememberNavController(),
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) }
 ){
     val backStackEntry by navHostController.currentBackStackEntryAsState()
     val currentScreen = RentWheelsScreen.valueOf(
@@ -41,7 +41,9 @@ fun DriveTrackerApp(
     val detailsViewModel = remember {
         VehicleDetailsViewModel(rep)
     }
-    val auth = Firebase.auth
+    val auth = remember {
+        Firebase.auth
+    }
     NavHost(
         navController = navHostController,
         startDestination = currentScreen.name
@@ -106,6 +108,12 @@ fun DriveTrackerApp(
                     detailsViewModel.deleteTruck()
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
+            )
+        }
+        composable(route = RentWheelsScreen.MyVehicles.name){
+            UserInfoScreen(
+                navHostController = navHostController,
+                auth = auth
             )
         }
     }

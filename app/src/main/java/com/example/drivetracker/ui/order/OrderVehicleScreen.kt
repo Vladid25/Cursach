@@ -99,13 +99,13 @@ fun BottomAppBarWithThreeSections(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                IconButton(onClick = { /* Handle home action */ }) {
+                IconButton(onClick = {navHostController.navigate(RentWheelsScreen.OrderVehicles.name)}) {
                     Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
                 }
                 IconButton(onClick = { dialogState.value=true }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                 }
-                IconButton(onClick = { /* Handle account action */ }) {
+                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
                     Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
                 }
             }

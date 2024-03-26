@@ -23,6 +23,8 @@ import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.entity.Truck
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 @Composable
@@ -91,7 +93,9 @@ fun AddTruckScreen(
                         yearText.text.toInt(),
                         cargoCapacity = cargoCapacity.text.toDouble()
                     )
-                    val truckRecord = TruckRecord(truck, uploadDate = Date())
+                    val truckRecord = TruckRecord(truck,
+                        uploadDate = LocalDate.now().format(DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd")))
                     viewModel.addTruck(truckRecord)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }

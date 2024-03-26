@@ -23,6 +23,8 @@ import com.example.drivetracker.data.TruckRecord
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 @Composable
@@ -105,7 +107,8 @@ fun AddCarScreen(
                         numberSeats = numSeatsText.text.toInt(),
                         maxSpeed = maxSpeedText.text.toDouble(),
                     )
-                    val carRecord = CarRecord(car, uploadDate = Date())
+                    val carRecord = CarRecord(car, uploadDate = LocalDate.now().format(
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     viewModel.addCar(carRecord)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
