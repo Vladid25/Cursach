@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.drivetracker.data.CarRecord
-import com.example.drivetracker.data.TruckRecord
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.ui.RentWheelsScreen
 
@@ -31,8 +31,8 @@ import com.example.drivetracker.ui.RentWheelsScreen
 fun OrderVehicleScreen(
     navHostController: NavHostController,
     viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) },
-    onCarClicked:(CarRecord)-> Unit,
-    onTruckClicked:(TruckRecord)->Unit
+    onCarClicked:(CarItem)-> Unit,
+    onTruckClicked:(TruckItem)->Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -43,7 +43,7 @@ fun OrderVehicleScreen(
             ) {
                 if (uiState.isTruck) {
                     items(viewModel.getTrucks()) { truck ->
-                        DisplayTruck(truckRecord = truck, onTruckClicked)
+                        DisplayTruck(truckItem = truck, onTruckClicked)
                     }
                 } else {
                     items(viewModel.getCars()) { car ->
@@ -119,13 +119,13 @@ fun BottomAppBarWithThreeSections(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayCar(carRecord: CarRecord, onCarClicked: (CarRecord) -> Unit) {
+fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
     Card(
         modifier = Modifier
             .padding(15.dp)
             .fillMaxWidth(),
         onClick = {
-            onCarClicked(carRecord)
+            onCarClicked(carItem)
         }
     ) {
         Row(Modifier.fillMaxWidth()){
@@ -134,11 +134,11 @@ fun DisplayCar(carRecord: CarRecord, onCarClicked: (CarRecord) -> Unit) {
                     .padding(20.dp)
             ) {
                 Text(
-                    text = carRecord.car.brand+" ",
+                    text = carItem.car.brand+" ",
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize
                 )
                 Text(
-                    text = carRecord.car.model,
+                    text = carItem.car.model,
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize
                 )
 
@@ -151,8 +151,8 @@ fun DisplayCar(carRecord: CarRecord, onCarClicked: (CarRecord) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${carRecord.rating}")
-                    Text(text = carRecord.car.year.toString())
+                    Text(text = "Rating: ${carItem.rating}")
+                    Text(text = carItem.car.year.toString())
                 }
 
             }
@@ -163,13 +163,13 @@ fun DisplayCar(carRecord: CarRecord, onCarClicked: (CarRecord) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayTruck(truckRecord: TruckRecord, onTruckClicked: (TruckRecord) -> Unit) {
+fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
     Card(
         modifier = Modifier
             .padding(15.dp)
             .fillMaxWidth(),
         onClick = {
-            onTruckClicked(truckRecord)
+            onTruckClicked(truckItem)
         }
     ) {
         Row(Modifier.fillMaxWidth()){
@@ -178,11 +178,11 @@ fun DisplayTruck(truckRecord: TruckRecord, onTruckClicked: (TruckRecord) -> Unit
                     .padding(20.dp)
             ) {
                 Text(
-                    text = truckRecord.truck.brand+" ",
+                    text = truckItem.truck.brand+" ",
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize
                 )
                 Text(
-                    text = truckRecord.truck.model,
+                    text = truckItem.truck.model,
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize
                 )
 
@@ -195,8 +195,8 @@ fun DisplayTruck(truckRecord: TruckRecord, onTruckClicked: (TruckRecord) -> Unit
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${truckRecord.rating}")
-                    Text(text = truckRecord.truck.year.toString())
+                    Text(text = "Rating: ${truckItem.rating}")
+                    Text(text = truckItem.truck.year.toString())
                 }
 
             }

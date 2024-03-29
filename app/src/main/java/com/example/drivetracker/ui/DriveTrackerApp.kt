@@ -34,16 +34,16 @@ fun DriveTrackerApp(
     )
     Firebase.initialize(context = LocalContext.current)
     val rep = VehicleRepository()
-
+    val auth = remember {
+        Firebase.auth
+    }
     val orderViewModel = remember {
         OrderVehicleViewModel(rep)
     }
     val detailsViewModel = remember {
-        VehicleDetailsViewModel(rep)
+        VehicleDetailsViewModel(rep, auth)
     }
-    val auth = remember {
-        Firebase.auth
-    }
+
     NavHost(
         navController = navHostController,
         startDestination = currentScreen.name

@@ -1,6 +1,9 @@
 package com.example.drivetracker.data
 
 import android.util.Log
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
+import com.example.drivetracker.data.records.CarRecord
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -8,15 +11,16 @@ import com.google.firebase.database.ValueEventListener
 
 class VehicleRepository(
     private val firebase: FirebaseDatabase = FirebaseDatabase
-    .getInstance("https://drivetracker-ecf96-default-rtdb.europe-west1.firebasedatabase.app/")) {
-    private var carsList = mutableListOf<CarRecord>()
-    fun getCars(callback: (List<CarRecord>?) -> Unit) {
+    .getInstance("https://drivetracker-ecf96-default-rtdb.europe-west1.firebasedatabase.app/")
+) {
+    private var carsList = mutableListOf<CarItem>()
+    fun getCars(callback: (List<CarItem>?) -> Unit) {
         val ref = firebase.getReference("Cars")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 carsList.clear()
                 for (carSnapshot in snapshot.children) {
-                    val car = carSnapshot.getValue(CarRecord::class.java)
+                    val car = carSnapshot.getValue(CarItem::class.java)
                     car?.let { carsList.add(it) }
                 }
                 callback(carsList)
@@ -28,19 +32,19 @@ class VehicleRepository(
         })
     }
 
-    fun addCar(car: CarRecord){
+    fun addCar(car: CarItem){
         val db = firebase.getReference("Cars")
         val carId = db.push().key!!
         db.child(carId).setValue(car)
     }
 
-    fun getTrucks(callback: (List<TruckRecord>?) -> Unit) {
+    fun getTrucks(callback: (List<TruckItem>?) -> Unit) {
         val ref = firebase.getReference("Trucks")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val trucksList = mutableListOf<TruckRecord>()
+                val trucksList = mutableListOf<TruckItem>()
                 for (carSnapshot in snapshot.children) {
-                    val car = carSnapshot.getValue(TruckRecord::class.java)
+                    val car = carSnapshot.getValue(TruckItem::class.java)
                     car?.let { trucksList.add(it) }
                 }
                 callback(trucksList)
@@ -52,18 +56,18 @@ class VehicleRepository(
         })
     }
 
-    fun addTruck(truck: TruckRecord){
+    fun addTruck(truck: TruckItem){
         val db = firebase.getReference("Trucks")
         val truckId = db.push().key!!
         db.child(truckId).setValue(truck)
     }
 
-    fun deleteCar(car: CarRecord){
+    fun deleteCar(car: CarItem){
         val ref = firebase.getReference("Cars")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
-                    val temp = carSnapshot.getValue(CarRecord::class.java)
+                    val temp = carSnapshot.getValue(CarItem::class.java)
                     if(temp?.car == car.car){
                         val carKey = carSnapshot.key
                         Log.v("Debug", carKey.toString())
@@ -87,12 +91,12 @@ class VehicleRepository(
         })
     }
 
-    fun deleteTruck(truck: TruckRecord){
+    fun deleteTruck(truck: TruckItem){
         val ref = firebase.getReference("Trucks")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
-                    val temp = dataSnapshot.getValue(TruckRecord::class.java)
+                    val temp = dataSnapshot.getValue(TruckItem::class.java)
                     if(temp?.uploadDate==truck.uploadDate){
                         val key = dataSnapshot.key
                         Log.v("Debug", key.toString())
@@ -114,6 +118,12 @@ class VehicleRepository(
                 Log.e("Debug", "Cancel deleting")
             }
         })
+    }
+
+    fun addCarRecord(carRecord: CarRecord){
+        val db = firebase.getReference("CarRecords")
+        val carId = db.push().key!!
+        db.child(carId).setValue(carRecord)
     }
 
 

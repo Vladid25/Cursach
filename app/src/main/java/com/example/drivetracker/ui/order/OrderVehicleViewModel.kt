@@ -1,8 +1,8 @@
 package com.example.drivetracker.ui.order
 
 import androidx.lifecycle.ViewModel
-import com.example.drivetracker.data.CarRecord
-import com.example.drivetracker.data.TruckRecord
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.model.OrderVehicleUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +17,8 @@ class OrderVehicleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(OrderVehicleUiState())
     val uiState:StateFlow<OrderVehicleUiState> = _uiState.asStateFlow()
 
-    private var carList = mutableListOf<CarRecord>()
-    private var truckList = mutableListOf<TruckRecord>()
+    private var carList = mutableListOf<CarItem>()
+    private var truckList = mutableListOf<TruckItem>()
 
     init {
         fetchCars()
@@ -51,21 +51,21 @@ class OrderVehicleViewModel @Inject constructor(
         }
     }
 
-    fun getCars(): MutableList<CarRecord> {
+    fun getCars(): MutableList<CarItem> {
         fetchCars()
         return carList
     }
 
-    fun getTrucks(): MutableList<TruckRecord>{
+    fun getTrucks(): MutableList<TruckItem>{
         fetchTrucks()
         return truckList
     }
 
-    fun addCar(car: CarRecord){
+    fun addCar(car: CarItem){
         vehicleRepository.addCar(car)
     }
 
-    fun addTruck(truck: TruckRecord){
+    fun addTruck(truck: TruckItem){
         vehicleRepository.addTruck(truck)
     }
 

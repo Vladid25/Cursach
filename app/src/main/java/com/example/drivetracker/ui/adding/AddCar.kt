@@ -18,14 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavHostController
-import com.example.drivetracker.data.CarRecord
-import com.example.drivetracker.data.TruckRecord
+import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.entity.Car
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 @Composable
 fun AddCarScreen(
@@ -107,9 +105,9 @@ fun AddCarScreen(
                         numberSeats = numSeatsText.text.toInt(),
                         maxSpeed = maxSpeedText.text.toDouble(),
                     )
-                    val carRecord = CarRecord(car, uploadDate = LocalDate.now().format(
+                    val carItem = CarItem(car, uploadDate = LocalDate.now().format(
                         DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                    viewModel.addCar(carRecord)
+                    viewModel.addCar(carItem)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
             }

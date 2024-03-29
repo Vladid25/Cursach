@@ -1,31 +1,34 @@
 package com.example.drivetracker.ui.vehicleDetails
 
 import androidx.lifecycle.ViewModel
-import com.example.drivetracker.data.CarRecord
-import com.example.drivetracker.data.TruckRecord
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
+import com.example.drivetracker.data.records.CarRecord
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 
 class VehicleDetailsViewModel @Inject constructor(
-    private val vehicleRepository: VehicleRepository
+    private val vehicleRepository: VehicleRepository,
+    private val auth: FirebaseAuth
 ): ViewModel() {
-    private lateinit var displayedCar: CarRecord
-    private lateinit var displayedTruck: TruckRecord
+    private lateinit var displayedCar: CarItem
+    private lateinit var displayedTruck: TruckItem
 
-    fun setCar(car: CarRecord){
+    fun setCar(car: CarItem){
         displayedCar = car
     }
 
-    fun getDisplayedCar(): CarRecord {
+    fun getDisplayedCar(): CarItem {
         return displayedCar
     }
 
-    fun setTruck(truckRecord: TruckRecord){
-        displayedTruck = truckRecord
+    fun setTruck(truckItem: TruckItem){
+        displayedTruck = truckItem
     }
 
-    fun getDisplayedTruck(): TruckRecord {
+    fun getDisplayedTruck(): TruckItem {
         return displayedTruck
     }
 
@@ -35,6 +38,14 @@ class VehicleDetailsViewModel @Inject constructor(
 
     fun deleteTruck(){
         vehicleRepository.deleteTruck(displayedTruck)
+    }
+
+    fun getUserEmail():String{
+        return auth.currentUser?.email.toString()
+    }
+
+    fun addCarRecord(carRecord: CarRecord){
+        vehicleRepository.addCarRecord(carRecord)
     }
 
 }

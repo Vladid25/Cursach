@@ -2,6 +2,8 @@
 
 package com.example.drivetracker.ui.vehicleDetails
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,12 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,8 +37,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.ui.RentWheelsScreen
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun CarDetailsScreen(
@@ -96,35 +104,43 @@ fun CarDetailsScreen(
         }
 
     }
-    println(dialogState.value.toString())
     if(dialogState.value){
-        PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController)
+        PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel)
     }
 }
 
 @Composable
 fun PopupCalendar(
     onDismiss: () -> Unit,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: VehicleDetailsViewModel
 ) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
 
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            Button(onClick = onDismiss) {
+            Button(onClick = {
+                if(datePickerState.selectedDateMillis!=null){
+                    selectedDate= convertMillisToLocalDate(datePickerState.selectedDateMillis!!)
+                    println(selectedDate)
+                    val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(), endRentDate = selectedDate)
+                    viewModel.addCarRecord(carRecord)
+                    navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
+                }
+            }) {
                 Text(text = "Підтвердити")
             }
         },
         title = { Text(text = "Підтвердженя") },
         text = {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
+            Column {
                 Spacer(modifier = Modifier.height(16.dp))
-                DatePicker(selectedDate = selectedDate) {
-                    selectedDate = it
-                }
+                DatePicker(
+                    state = datePickerState,
+                    showModeToggle = false,
+                )
             }
         },
         dismissButton = {
@@ -135,19 +151,12 @@ fun PopupCalendar(
     )
 }
 
-@Composable
-fun DatePicker(
-    selectedDate: LocalDate,
-    onDateSelected: (LocalDate) -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-    DatePicker(
-        state = datePickerState,
-        modifier = Modifier.fillMaxWidth()
-    )
+fun convertMillisToLocalDate(millis: Long) : LocalDate {
+    return Instant
+        .ofEpochMilli(millis)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
 }
-
-
 
 @Preview
 @Composable
