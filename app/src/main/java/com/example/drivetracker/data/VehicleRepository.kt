@@ -126,6 +126,34 @@ class VehicleRepository(
         db.child(carId).setValue(carRecord)
     }
 
+    fun updateCarItem(car: CarItem){
+        deleteCar(car)
+        car.setRent()
+        addCar(car)
+    }
+
+    fun getCarRecordByEmail(email:String, callback: (List<CarRecord>?) -> Unit){
+        val list = mutableListOf<CarRecord>()
+        val ref = firebase.getReference("CarRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (carSnapshot in snapshot.children) {
+                    val car = carSnapshot.getValue(CarRecord::class.java)
+                    if (car != null) {
+                        println("here")
+                        list.add(car)
+                    }
+                    callback(list)
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
 
 
 }

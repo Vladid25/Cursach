@@ -21,13 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.R
+import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun UserInfoScreen(
     navHostController: NavHostController,
-    auth:FirebaseAuth
+    viewModel: UserInfoViewModel
 ){
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -51,13 +52,20 @@ fun UserInfoScreen(
                             .clip(CircleShape)
                     )
                     Text(
-                        text = auth.currentUser?.email.toString(),
-                        fontSize = MaterialTheme.typography.displaySmall.fontSize,
+                        text = viewModel.getUserEmail(),
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(20.dp)
                     )
                 }
             }
+            
+            val list = viewModel.getCarRecords()
+            list.forEach {
+                DisplayCarRecord(carRecord = it)
+            }
+
+
         }
         BottomAppBarWithThreeSections(navHostController)
     }
@@ -67,4 +75,11 @@ fun UserInfoScreen(
 @Composable
 fun UserInfoScreenPreview(){
     //UserInfoScreen()
+}
+
+@Composable
+fun DisplayCarRecord(carRecord: CarRecord){
+    Card {
+        Text(text = carRecord.carItem.car.brand)
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.drivetracker.ui.vehicleDetails
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
@@ -46,6 +47,10 @@ class VehicleDetailsViewModel @Inject constructor(
 
     fun addCarRecord(carRecord: CarRecord){
         vehicleRepository.addCarRecord(carRecord)
+    }
+
+    fun updateCarItem(){
+        vehicleRepository.updateCarItem(displayedCar)
     }
 
 }

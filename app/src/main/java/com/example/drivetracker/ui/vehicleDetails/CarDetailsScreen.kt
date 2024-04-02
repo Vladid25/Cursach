@@ -43,6 +43,7 @@ import com.example.drivetracker.ui.RentWheelsScreen
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CarDetailsScreen(
@@ -125,7 +126,9 @@ fun PopupCalendar(
                 if(datePickerState.selectedDateMillis!=null){
                     selectedDate= convertMillisToLocalDate(datePickerState.selectedDateMillis!!)
                     println(selectedDate)
-                    val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(), endRentDate = selectedDate)
+                    viewModel.updateCarItem()
+                    val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(),
+                        endRentDate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     viewModel.addCarRecord(carRecord)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }

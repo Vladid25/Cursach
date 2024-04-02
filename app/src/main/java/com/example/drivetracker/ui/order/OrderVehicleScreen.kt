@@ -46,7 +46,7 @@ fun OrderVehicleScreen(
                         DisplayTruck(truckItem = truck, onTruckClicked)
                     }
                 } else {
-                    items(viewModel.getCars()) { car ->
+                    items(viewModel.getEnableCars()) { car ->
                         DisplayCar(car, onCarClicked)
                     }
                 }

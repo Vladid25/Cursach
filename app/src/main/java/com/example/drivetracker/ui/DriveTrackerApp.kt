@@ -17,6 +17,7 @@ import com.example.drivetracker.ui.auth.SignInScreen
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.example.drivetracker.ui.userInfo.UserInfoScreen
+import com.example.drivetracker.ui.userInfo.UserInfoViewModel
 import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.TruckDetailsScreen
 import com.example.drivetracker.ui.vehicleDetails.VehicleDetailsViewModel
@@ -43,7 +44,9 @@ fun DriveTrackerApp(
     val detailsViewModel = remember {
         VehicleDetailsViewModel(rep, auth)
     }
-
+    val userInfoViewModel= remember {
+        UserInfoViewModel(rep,auth)
+    }
     NavHost(
         navController = navHostController,
         startDestination = currentScreen.name
@@ -113,7 +116,7 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.MyVehicles.name){
             UserInfoScreen(
                 navHostController = navHostController,
-                auth = auth
+                viewModel = userInfoViewModel
             )
         }
     }
