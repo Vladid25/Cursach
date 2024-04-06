@@ -70,7 +70,7 @@ class OrderVehicleViewModel @Inject constructor(
                 enableTruckList.add(item)
             }
         }
-        return truckList
+        return enableTruckList
     }
 
     fun addCar(car: CarItem){

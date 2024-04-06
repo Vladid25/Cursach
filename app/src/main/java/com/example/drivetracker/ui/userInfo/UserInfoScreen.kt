@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,6 +30,7 @@ import androidx.navigation.NavHostController
 import com.example.drivetracker.R
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
+import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
 
 @Composable
@@ -61,66 +67,88 @@ fun UserInfoScreen(
                     )
                 }
             }
-            
+
             val carList = viewModel.getCarRecords()
-            carList.forEach {
-                DisplayCarRecord(carRecord = it)
-            }
-            
             val truckList = viewModel.getTruckRecords()
-            truckList.forEach { 
-                DisplayTruckRecords(truckRecord = it)
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 300.dp),
+                modifier = Modifier
+                    .height(375.dp)
+                    .padding(10.dp)
+            ) {
+                items(carList){
+                    DisplayCarRecord(
+                        carRecord = it,
+                        onFinish = {
+                            viewModel.updateCar(it.carItem)
+                            it.setPassive()
+                            navHostController.navigate(RentWheelsScreen.CommentScreen.name)
+                        }
+                    )
+                }
+                items(truckList){
+                    DisplayTruckRecords(truckRecord = it)
+                }
             }
-
-
         }
         BottomAppBarWithThreeSections(navHostController)
+
     }
 }
 
 @Preview
 @Composable
 fun UserInfoScreenPreview(){
-    DisplayCarRecord(carRecord = CarRecord())
+    //DisplayCarRecord(carRecord = CarRecord())
 }
 
 @Composable
-fun DisplayCarRecord(carRecord: CarRecord){
+fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
     Card(
         modifier = Modifier
             .padding(15.dp)
             .fillMaxWidth()
     ) {
-        Row(Modifier.fillMaxWidth()){
-            Row(
-                Modifier
-                    .padding(20.dp)
-            ) {
-                Text(
-                    text = carRecord.carItem.car.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-                Text(
-                    text = carRecord.carItem.car.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Column {
+        Column {
+            Row(Modifier.fillMaxWidth()){
+                Row(
+                    Modifier
+                        .padding(20.dp)
+                ) {
                     Text(
-                        text = "Видача: ${carRecord.startRentDate}"
+                        text = carRecord.carItem.car.brand+" ",
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
                     )
-                    Text(text = "Закінчення: ${carRecord.endRentDate}")
+                    Text(
+                        text = carRecord.carItem.car.model,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
                 }
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Column {
+                        Text(
+                            text = "Видача: ${carRecord.startRentDate}"
+                        )
+                        Text(text = "Закінчення: ${carRecord.endRentDate}")
+                    }
 
+                }
+            }
+            Button(onClick ={
+
+                onFinish.invoke()
+            } ) {
+                Text(text = "Завершити")
             }
         }
+        
 
     }
 }
@@ -132,35 +160,41 @@ fun DisplayTruckRecords(truckRecord: TruckRecord){
             .padding(15.dp)
             .fillMaxWidth(),
     ) {
-        Row(Modifier.fillMaxWidth()){
-            Row(
-                Modifier
-                    .padding(20.dp)
-            ) {
-                Text(
-                    text = truckRecord.truckItem.truck.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-                Text(
-                    text = truckRecord.truckItem.truck.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
+        Column {
+            Row(Modifier.fillMaxWidth()){
+                Row(
+                    Modifier
+                        .padding(20.dp)
+                ) {
+                    Text(
+                        text = truckRecord.truckItem.truck.brand+" ",
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+                    Text(
+                        text = truckRecord.truckItem.truck.model,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
 
-            }
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(text = "Видача: ${truckRecord.startRentDate}")
-                    Text(text = "Завершення ${truckRecord.endRentDate}")
                 }
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(text = "Видача: ${truckRecord.startRentDate}")
+                        Text(text = "Завершення ${truckRecord.endRentDate}")
+                    }
 
+                }
+            }
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Завершити")
             }
         }
+
 
     }
 }

@@ -139,6 +139,12 @@ class VehicleRepository(
         addCar(car)
     }
 
+    fun updateCarItemUnRent(car: CarItem){
+        deleteCar(car)
+        car.unRent()
+        addCar(car)
+    }
+
     fun updateTruckItem(truck: TruckItem){
         deleteTruck(truck)
         truck.setRent()
@@ -152,7 +158,7 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
                     val car = carSnapshot.getValue(CarRecord::class.java)
-                    if (car != null && car.ownerEmail == email) {
+                    if (car != null && car.ownerEmail == email&& car.isActive()) {
                         list.add(car)
                     }
                     callback(list)

@@ -14,6 +14,8 @@ import com.example.drivetracker.ui.adding.AddCarScreen
 import com.example.drivetracker.ui.adding.AddTruckScreen
 import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
+import com.example.drivetracker.ui.commenting.CommentScreen
+import com.example.drivetracker.ui.commenting.CommentScreenViewModel
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
 import com.example.drivetracker.ui.userInfo.UserInfoScreen
@@ -46,6 +48,9 @@ fun DriveTrackerApp(
     }
     val userInfoViewModel= remember {
         UserInfoViewModel(rep,auth)
+    }
+    val commentScreenViewModel = remember {
+        CommentScreenViewModel(auth, rep)
     }
     NavHost(
         navController = navHostController,
@@ -119,6 +124,12 @@ fun DriveTrackerApp(
                 viewModel = userInfoViewModel
             )
         }
+        composable(route = RentWheelsScreen.CommentScreen.name){
+            CommentScreen(
+                viewModel = commentScreenViewModel,
+                navHostController = navHostController
+            )
+        }
     }
 
 }
@@ -131,5 +142,6 @@ enum class RentWheelsScreen{
     AddCar,
     AddTruck,
     CarDetails,
-    TruckDetails
+    TruckDetails,
+    CommentScreen
 }

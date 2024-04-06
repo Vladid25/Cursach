@@ -2,6 +2,7 @@ package com.example.drivetracker.ui.userInfo
 
 import androidx.lifecycle.ViewModel
 import com.example.drivetracker.data.VehicleRepository
+import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +41,10 @@ class UserInfoViewModel@Inject constructor(
     fun getCarRecords(): List<CarRecord>{
         fetchCarRecords()
         return carList
+    }
+
+    fun updateCar(car:CarItem){
+        vehicleRepository.updateCarItemUnRent(car)
     }
 
     fun getTruckRecords():List<TruckRecord>{
