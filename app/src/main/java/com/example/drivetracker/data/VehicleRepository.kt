@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
+import com.example.drivetracker.data.records.TruckRecord
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -97,7 +98,7 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot in snapshot.children) {
                     val temp = dataSnapshot.getValue(TruckItem::class.java)
-                    if(temp?.uploadDate==truck.uploadDate){
+                    if(temp?.uploadDate == truck.uploadDate){
                         val key = dataSnapshot.key
                         Log.v("Debug", key.toString())
                         if (key != null) {
@@ -126,10 +127,22 @@ class VehicleRepository(
         db.child(carId).setValue(carRecord)
     }
 
+    fun addTruckRecord(truckRecord: TruckRecord){
+        val db = firebase.getReference("TruckRecords")
+        val truckId = db.push().key!!
+        db.child(truckId).setValue(truckRecord)
+    }
+
     fun updateCarItem(car: CarItem){
         deleteCar(car)
         car.setRent()
         addCar(car)
+    }
+
+    fun updateTruckItem(truck: TruckItem){
+        deleteTruck(truck)
+        truck.setRent()
+        addTruck(truck)
     }
 
     fun getCarRecordByEmail(email:String, callback: (List<CarRecord>?) -> Unit){
@@ -139,12 +152,30 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
                     val car = carSnapshot.getValue(CarRecord::class.java)
-                    if (car != null) {
-                        println("here")
+                    if (car != null && car.ownerEmail == email) {
                         list.add(car)
                     }
                     callback(list)
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
+    fun getTruckRecordByEmail(email:String, callback: (List<TruckRecord>?) -> Unit){
+        val list = mutableListOf<TruckRecord>()
+        val ref = firebase.getReference("TruckRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (truckSnapshot in snapshot.children) {
+                    val truck = truckSnapshot.getValue(TruckRecord::class.java)
+                    if (truck != null && truck.ownerEmail == email) {
+                        list.add(truck)
+                    }
+                    callback(list)
                 }
             }
 

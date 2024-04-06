@@ -6,6 +6,7 @@ import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.records.CarRecord
+import com.example.drivetracker.data.records.TruckRecord
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -53,4 +54,11 @@ class VehicleDetailsViewModel @Inject constructor(
         vehicleRepository.updateCarItem(displayedCar)
     }
 
+    fun addTruckRecord(truckRecord: TruckRecord){
+        vehicleRepository.addTruckRecord(truckRecord)
+    }
+
+    fun updateTruckItem(){
+        vehicleRepository.updateTruckItem(displayedTruck)
+    }
 }

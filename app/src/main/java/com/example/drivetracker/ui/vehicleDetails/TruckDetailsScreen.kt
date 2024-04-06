@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +32,8 @@ fun TruckDetailsScreen(
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
+        val dialogState = remember { mutableStateOf(false) }
+
         Column{
             Box {
                 Button(onClick = { navHostController.navigate(route = RentWheelsScreen.OrderVehicles.name)}) {
@@ -65,12 +69,16 @@ fun TruckDetailsScreen(
                 Button(onClick = deleteTruck) {
                     Text(text = "Видалити")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { dialogState.value=true }) {
                     Text(text = "Орендувати")
                 }
             }
 
         }
+        if(dialogState.value){
+            PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel, isCar = false)
+        }
     }
+
 }
 

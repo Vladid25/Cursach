@@ -15,4 +15,8 @@ class TruckItem (
     fun unRent(){
         rented = false
     }
+
+    fun isRented():Boolean{
+        return rented
+    }
 }

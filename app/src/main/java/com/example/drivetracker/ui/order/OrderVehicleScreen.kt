@@ -42,7 +42,7 @@ fun OrderVehicleScreen(
                 columns = GridCells.Adaptive(minSize = 300.dp)
             ) {
                 if (uiState.isTruck) {
-                    items(viewModel.getTrucks()) { truck ->
+                    items(viewModel.getEnableTrucks()) { truck ->
                         DisplayTruck(truckItem = truck, onTruckClicked)
                     }
                 } else {

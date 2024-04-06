@@ -62,8 +62,14 @@ class OrderVehicleViewModel @Inject constructor(
         return enableCarList
     }
 
-    fun getTrucks(): MutableList<TruckItem>{
+    fun getEnableTrucks(): MutableList<TruckItem>{
         fetchTrucks()
+        val enableTruckList = mutableListOf<TruckItem>()
+        for (item in truckList){
+            if(!item.isRented()){
+                enableTruckList.add(item)
+            }
+        }
         return truckList
     }
 

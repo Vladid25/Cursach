@@ -119,7 +119,7 @@ fun SignInScreen(
                      isError = password2!=password
                     auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
                         if(it.isSuccessful){
-                            auth.signOut()
+                            onLogInClick.invoke()
                         } else {
                             Log.e("", it.exception.toString())
                         }

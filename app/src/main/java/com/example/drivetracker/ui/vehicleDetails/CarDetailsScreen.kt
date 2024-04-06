@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.records.CarRecord
+import com.example.drivetracker.data.records.TruckRecord
 import com.example.drivetracker.ui.RentWheelsScreen
 import java.time.Instant
 import java.time.LocalDate
@@ -114,7 +115,8 @@ fun CarDetailsScreen(
 fun PopupCalendar(
     onDismiss: () -> Unit,
     navHostController: NavHostController,
-    viewModel: VehicleDetailsViewModel
+    viewModel: VehicleDetailsViewModel,
+    isCar:Boolean = true
 ) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
@@ -126,10 +128,18 @@ fun PopupCalendar(
                 if(datePickerState.selectedDateMillis!=null){
                     selectedDate= convertMillisToLocalDate(datePickerState.selectedDateMillis!!)
                     println(selectedDate)
-                    viewModel.updateCarItem()
-                    val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(),
-                        endRentDate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                    viewModel.addCarRecord(carRecord)
+                    if(isCar){
+                        viewModel.updateCarItem()
+                        val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(),
+                            endRentDate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        viewModel.addCarRecord(carRecord)
+                    }else{
+                        viewModel.updateTruckItem()
+                        val truckRecord = TruckRecord(truckItem = viewModel.getDisplayedTruck(), ownerEmail = viewModel.getUserEmail(),
+                            endRentDate = selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        viewModel.addTruckRecord(truckRecord)
+                    }
+
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
             }) {
