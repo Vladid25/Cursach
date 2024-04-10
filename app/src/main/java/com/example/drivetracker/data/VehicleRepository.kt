@@ -74,12 +74,6 @@ class VehicleRepository(
                         Log.v("Debug", carKey.toString())
                         if (carKey != null) {
                             ref.child(carKey).removeValue()
-                                .addOnSuccessListener {
-                                    println("Об'єкт успішно видалено з бази даних.")
-                                }
-                                .addOnFailureListener { error ->
-                                    println("Помилка при видаленні об'єкта: $error")
-                                }
                         }
                         break
                     }
@@ -151,18 +145,19 @@ class VehicleRepository(
         addTruck(truck)
     }
 
-    fun getCarRecordByEmail(email:String, callback: (List<CarRecord>?) -> Unit){
+    fun getCarRecordByEmail(email: String, callback: (List<CarRecord>?) -> Unit) {
         val list = mutableListOf<CarRecord>()
         val ref = firebase.getReference("CarRecords")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
                     val car = carSnapshot.getValue(CarRecord::class.java)
-                    if (car != null && car.ownerEmail == email&& car.isActive()) {
+                    println("car: active = ${car?.isActive()}")
+                    if (car != null && car.ownerEmail == email && car.isActive()) {
                         list.add(car)
                     }
-                    callback(list)
                 }
+                callback(list)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -170,6 +165,7 @@ class VehicleRepository(
             }
         })
     }
+
 
     fun getTruckRecordByEmail(email:String, callback: (List<TruckRecord>?) -> Unit){
         val list = mutableListOf<TruckRecord>()
@@ -189,6 +185,46 @@ class VehicleRepository(
                 callback(null)
             }
         })
+    }
+
+    private fun deleteCarRecord(carRecord: CarRecord) {
+        val ref = firebase.getReference("CarRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (carSnapshot in snapshot.children) {
+                    val temp = carSnapshot.getValue(CarRecord::class.java)
+                    println("temp: $temp, ${temp?.carItem?.car?.brand}, active = ${temp?.isActive()}")
+                    println("carRecord: $carRecord, ${carRecord.carItem.car.brand}, active = ${carRecord.isActive()}")
+                    if (temp?.carItem?.car ==carRecord.carItem.car&& temp.isActive()) {
+                        println("Deleting car record")
+                        val carKey = carSnapshot.key
+                        if (carKey != null) {
+                            println("Deleting car key: $carKey")
+                            ref.child(carKey).removeValue()
+                                .addOnSuccessListener {
+                                    println("Car record $carRecord deleted from the database.")
+                                }
+                                .addOnFailureListener { error ->
+                                    println("Error deleting object: $error")
+                                }
+                        } else {
+                            println("Car key is null")
+                        }
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("Cancel deleting: $error")
+            }
+        })
+    }
+
+    fun updateCarRecord(carRecord: CarRecord) {
+        deleteCarRecord(carRecord)
+        carRecord.setPassive()
+        addCarRecord(carRecord)
     }
 
 

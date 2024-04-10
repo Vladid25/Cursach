@@ -81,8 +81,8 @@ fun UserInfoScreen(
                     DisplayCarRecord(
                         carRecord = it,
                         onFinish = {
+                            viewModel.updateCarRecord(it)
                             viewModel.updateCar(it.carItem)
-                            it.setPassive()
                             navHostController.navigate(RentWheelsScreen.CommentScreen.name)
                         }
                     )

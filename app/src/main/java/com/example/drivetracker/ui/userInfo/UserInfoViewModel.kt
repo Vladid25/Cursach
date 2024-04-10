@@ -51,4 +51,8 @@ class UserInfoViewModel@Inject constructor(
         fetchTruckRecords()
         return truckList
     }
+
+    fun updateCarRecord(carRecord: CarRecord){
+        vehicleRepository.updateCarRecord(carRecord)
+    }
 }
