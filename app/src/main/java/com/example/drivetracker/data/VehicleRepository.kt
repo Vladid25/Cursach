@@ -152,8 +152,8 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
                     val car = carSnapshot.getValue(CarRecord::class.java)
-                    println("car: active = ${car?.isActive()}")
-                    if (car != null && car.ownerEmail == email && car.isActive()) {
+                    println("car: active = ${car?.isActive}")
+                    if (car != null && car.ownerEmail == email && car.isActive) {
                         list.add(car)
                     }
                 }
@@ -193,9 +193,9 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (carSnapshot in snapshot.children) {
                     val temp = carSnapshot.getValue(CarRecord::class.java)
-                    println("temp: $temp, ${temp?.carItem?.car?.brand}, active = ${temp?.isActive()}")
-                    println("carRecord: $carRecord, ${carRecord.carItem.car.brand}, active = ${carRecord.isActive()}")
-                    if (temp?.carItem?.car ==carRecord.carItem.car&& temp.isActive()) {
+                    println("temp: $temp, ${temp?.carItem?.car?.brand}, active = ${temp?.isActive}")
+                    println("carRecord: $carRecord, ${carRecord.carItem.car.brand}, active = ${carRecord.isActive}")
+                    if (temp?.carItem?.car ==carRecord.carItem.car&& temp.isActive) {
                         println("Deleting car record")
                         val carKey = carSnapshot.key
                         if (carKey != null) {
@@ -224,6 +224,7 @@ class VehicleRepository(
     fun updateCarRecord(carRecord: CarRecord) {
         deleteCarRecord(carRecord)
         carRecord.setPassive()
+        carRecord.carItem.unRent()
         addCarRecord(carRecord)
     }
 
