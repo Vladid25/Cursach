@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import com.example.drivetracker.data.coments.Comment
 import com.example.drivetracker.ui.RentWheelsScreen
 
 @Composable
@@ -33,7 +35,7 @@ fun CommentScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
-            var rating by remember { mutableStateOf(0) } // Зберігаємо оцінку користувача
+            var rating by remember { mutableIntStateOf(0) }
 
             Text(text = "Дякуємо за користування\n Напишіть відгук, якщо бажаєте")
 
@@ -57,7 +59,11 @@ fun CommentScreen(
                     Text(text = "Скасувати")
                 }
                 Button(onClick = {
-
+                    if(textFieldValue.text!=""&& rating!=0){
+                        val comment = Comment(viewModel.getEmail(),textFieldValue.text, rating)
+                        viewModel.updateCarWithComment(comment)
+                        navHostController.navigate(RentWheelsScreen.MyVehicles.name)
+                    }
                 }) {
                     Text(text = "Підтвердити")
                 }

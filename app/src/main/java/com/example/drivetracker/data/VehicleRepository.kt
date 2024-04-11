@@ -1,6 +1,7 @@
 package com.example.drivetracker.data
 
 import android.util.Log
+import com.example.drivetracker.data.coments.Comment
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
@@ -226,6 +227,12 @@ class VehicleRepository(
         carRecord.setPassive()
         carRecord.carItem.unRent()
         addCarRecord(carRecord)
+    }
+
+    fun updateCarWithComment(car: CarItem,comment: Comment){
+        deleteCar(car)
+        car.addComment(comment)
+        addCar(car)
     }
 
 

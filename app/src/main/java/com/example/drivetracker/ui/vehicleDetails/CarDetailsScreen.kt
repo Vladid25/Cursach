@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
@@ -37,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.drivetracker.data.coments.Comment
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
@@ -102,8 +107,15 @@ fun CarDetailsScreen(
                     Text(text = "Орендувати")
                 }
             }
-
+            LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
+                items(car.comments){
+                    DisplayComment(comment = it)
+                }
+            }
         }
+        
+
+
 
     }
     if(dialogState.value){
@@ -169,6 +181,16 @@ fun convertMillisToLocalDate(millis: Long) : LocalDate {
         .ofEpochMilli(millis)
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
+}
+
+@Composable
+fun DisplayComment(comment: Comment){
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text = comment.authorEmail +" " +comment.rating)
+        Text(text = comment.text)
+    }
 }
 
 @Preview

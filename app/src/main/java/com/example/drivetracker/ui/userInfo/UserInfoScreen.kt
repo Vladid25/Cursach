@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.R
+import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
 import com.example.drivetracker.ui.RentWheelsScreen
@@ -36,7 +38,10 @@ import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
 @Composable
 fun UserInfoScreen(
     navHostController: NavHostController,
-    viewModel: UserInfoViewModel
+    viewModel: UserInfoViewModel,
+    onCarClick:(CarItem)->Unit,
+    onTruckClick:(TruckItem)->Unit
+
 ){
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -83,7 +88,7 @@ fun UserInfoScreen(
                         onFinish = {
                             viewModel.updateCarRecord(it)
                             viewModel.updateCar(it.carItem)
-                            navHostController.navigate(RentWheelsScreen.CommentScreen.name)
+                            onCarClick.invoke(it.carItem)
                         }
                     )
                 }

@@ -121,7 +121,14 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.MyVehicles.name){
             UserInfoScreen(
                 navHostController = navHostController,
-                viewModel = userInfoViewModel
+                viewModel = userInfoViewModel,
+                onCarClick = {
+                    commentScreenViewModel.setCar(it)
+                    navHostController.navigate(RentWheelsScreen.CommentScreen.name)
+                },
+                onTruckClick = {
+
+                }
             )
         }
         composable(route = RentWheelsScreen.CommentScreen.name){
