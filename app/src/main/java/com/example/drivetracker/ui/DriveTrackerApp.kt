@@ -127,7 +127,8 @@ fun DriveTrackerApp(
                     navHostController.navigate(RentWheelsScreen.CommentScreen.name)
                 },
                 onTruckClick = {
-
+                    commentScreenViewModel.setTruck(it)
+                    navHostController.navigate(RentWheelsScreen.CommentScreen.name)
                 }
             )
         }

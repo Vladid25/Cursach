@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.coments.Comment
 import com.example.drivetracker.data.items.CarItem
+import com.example.drivetracker.data.items.TruckItem
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -13,10 +14,16 @@ class CommentScreenViewModel @Inject constructor(
     private val vehicleRepository: VehicleRepository
 ): ViewModel() {
     private lateinit var car:CarItem
-    private var isCar by Delegates.notNull<Boolean>()
+    private lateinit var truck: TruckItem
+    private var _isCar by Delegates.notNull<Boolean>()
     fun setCar(carItem: CarItem){
         car = carItem
-        isCar = true
+        _isCar = true
+    }
+
+    fun setTruck(truckItem: TruckItem){
+        truck = truckItem
+        _isCar = false
     }
 
     fun getCar():CarItem{
@@ -28,5 +35,13 @@ class CommentScreenViewModel @Inject constructor(
 
     fun updateCarWithComment(comment: Comment){
         vehicleRepository.updateCarWithComment(car,comment)
+    }
+
+    fun updateTruckWithComment(comment: Comment){
+        vehicleRepository.updateTruckWithComment(truck, comment)
+    }
+
+    fun isCar():Boolean{
+        return _isCar
     }
 }

@@ -61,7 +61,12 @@ fun CommentScreen(
                 Button(onClick = {
                     if(textFieldValue.text!=""&& rating!=0){
                         val comment = Comment(viewModel.getEmail(),textFieldValue.text, rating)
-                        viewModel.updateCarWithComment(comment)
+                        if(viewModel.isCar()){
+                            viewModel.updateCarWithComment(comment)
+                        }
+                        else{
+                            viewModel.updateTruckWithComment(comment)
+                        }
                         navHostController.navigate(RentWheelsScreen.MyVehicles.name)
                     }
                 }) {

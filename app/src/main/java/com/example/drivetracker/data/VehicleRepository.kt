@@ -139,6 +139,11 @@ class VehicleRepository(
         car.unRent()
         addCar(car)
     }
+    fun updateTruckItemUnRent(truck: TruckItem){
+        deleteTruck(truck)
+        truck.unRent()
+        addTruck(truck)
+    }
 
     fun updateTruckItem(truck: TruckItem){
         deleteTruck(truck)
@@ -175,7 +180,7 @@ class VehicleRepository(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (truckSnapshot in snapshot.children) {
                     val truck = truckSnapshot.getValue(TruckRecord::class.java)
-                    if (truck != null && truck.ownerEmail == email) {
+                    if (truck != null && truck.ownerEmail == email&& truck.isActive) {
                         list.add(truck)
                     }
                     callback(list)
@@ -222,6 +227,38 @@ class VehicleRepository(
         })
     }
 
+    private fun deleteTruckRecord(truckRecord: TruckRecord) {
+        val ref = firebase.getReference("TruckRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (truckSnapshot in snapshot.children) {
+                    val temp = truckSnapshot.getValue(TruckRecord::class.java)
+                    println("temp: ${temp?.truckItem?.truck}, ${temp?.truckItem?.truck?.brand}, active = ${temp?.isActive}")
+                    println("carRecord: ${truckRecord.truckItem.truck}, ${truckRecord.truckItem.truck.brand}, active = ${truckRecord.isActive}")
+                    if (temp?.truckItem?.truck?.brand == truckRecord.truckItem.truck.brand&& temp.isActive) {
+                        val truckKey = truckSnapshot.key
+                        if (truckKey != null) {
+                            ref.child(truckKey).removeValue()
+                                .addOnSuccessListener {
+                                    println("Truck record $truckRecord deleted from the database.")
+                                }
+                                .addOnFailureListener { error ->
+                                    println("Error deleting object: $error")
+                                }
+                        } else {
+                            println("Truck key is null")
+                        }
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("Cancel deleting: $error")
+            }
+        })
+    }
+
     fun updateCarRecord(carRecord: CarRecord) {
         deleteCarRecord(carRecord)
         carRecord.setPassive()
@@ -235,6 +272,17 @@ class VehicleRepository(
         addCar(car)
     }
 
+    fun updateTruckRecord(truckRecord: TruckRecord){
+        deleteTruckRecord(truckRecord)
+        truckRecord.setPassive()
+        truckRecord.truckItem.unRent()
+        addTruckRecord(truckRecord)
+    }
 
+    fun updateTruckWithComment(truck: TruckItem, comment: Comment){
+        deleteTruck(truck)
+        truck.addComment(comment)
+        addTruck(truck)
+    }
 
 }

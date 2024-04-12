@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -19,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.ui.RentWheelsScreen
 
@@ -73,7 +77,11 @@ fun TruckDetailsScreen(
                     Text(text = "Орендувати")
                 }
             }
-
+            LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
+                items(truck.comments){
+                    DisplayComment(comment = it)
+                }
+            }
         }
         if(dialogState.value){
             PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel, isCar = false)

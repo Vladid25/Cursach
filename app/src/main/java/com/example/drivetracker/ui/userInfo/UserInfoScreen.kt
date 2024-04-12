@@ -41,7 +41,6 @@ fun UserInfoScreen(
     viewModel: UserInfoViewModel,
     onCarClick:(CarItem)->Unit,
     onTruckClick:(TruckItem)->Unit
-
 ){
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -93,7 +92,13 @@ fun UserInfoScreen(
                     )
                 }
                 items(truckList){
-                    DisplayTruckRecords(truckRecord = it)
+                    DisplayTruckRecords(
+                        truckRecord = it,
+                        onFinish = {
+                            viewModel.updateTruckRecord(it)
+                            viewModel.updateTruck(it.truckItem)
+                            onTruckClick.invoke(it.truckItem)
+                        })
                 }
             }
         }
@@ -159,7 +164,7 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
 }
 
 @Composable
-fun DisplayTruckRecords(truckRecord: TruckRecord){
+fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit){
     Card(
         modifier = Modifier
             .padding(15.dp)
@@ -195,7 +200,7 @@ fun DisplayTruckRecords(truckRecord: TruckRecord){
 
                 }
             }
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick =onFinish) {
                 Text(text = "Завершити")
             }
         }

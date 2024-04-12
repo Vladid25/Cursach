@@ -188,7 +188,7 @@ fun DisplayComment(comment: Comment){
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = comment.authorEmail +" " +comment.rating)
+        Text(text = comment.authorEmail + " " +comment.rating)
         Text(text = comment.text)
     }
 }
