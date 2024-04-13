@@ -151,8 +151,9 @@ fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${carItem.rating}")
-                    Text(text = carItem.car.year.toString())
+                    Text(text = "★${carItem.getRating()}")
+                    Text(text = carItem.car.year.toString()+"р.")
+                    Text(text = carItem.getPrice().toString()+" грн")
                 }
 
             }
@@ -195,8 +196,9 @@ fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${truckItem.rating}")
-                    Text(text = truckItem.truck.year.toString())
+                    Text(text = "★${truckItem.getRating()}")
+                    Text(text = truckItem.truck.year.toString()+"р.")
+                    Text(text = truckItem.getPrice().toString() + " грн")
                 }
 
             }

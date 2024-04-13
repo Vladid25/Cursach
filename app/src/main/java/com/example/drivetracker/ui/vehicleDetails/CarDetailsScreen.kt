@@ -75,7 +75,7 @@ fun CarDetailsScreen(
                 modifier =  Modifier.fillMaxWidth()
             )
             Text(
-                text = "Рейтинг: " + car.rating,
+                text = "Рейтинг: " + car.getRating(),
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(

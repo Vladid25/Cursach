@@ -51,7 +51,7 @@ fun TruckDetailsScreen(
                 modifier =  Modifier.fillMaxWidth()
             )
             Text(
-                text = "Рейтинг: " + truck.rating,
+                text = "★${truck.getRating()}",
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(

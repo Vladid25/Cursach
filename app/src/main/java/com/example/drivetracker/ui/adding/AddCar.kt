@@ -96,6 +96,19 @@ fun AddCarScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
 
+            var priceText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = priceText,
+                onValueChange = {
+                    priceText = it
+                },
+                label={
+                    Text(text = "Ціна")
+                },
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            )
+
             Button(onClick = {
                 if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && numSeatsText.text.isNotEmpty()) {
                     val car = Car(
@@ -105,8 +118,10 @@ fun AddCarScreen(
                         numberSeats = numSeatsText.text.toInt(),
                         maxSpeed = maxSpeedText.text.toDouble(),
                     )
-                    val carItem = CarItem(car, uploadDate = LocalDate.now().format(
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    val carItem = CarItem(
+                        car,
+                        uploadDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        price = priceText.text.toDouble())
                     viewModel.addCar(carItem)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }

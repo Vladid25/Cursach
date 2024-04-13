@@ -34,6 +34,8 @@ import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
 import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun UserInfoScreen(
@@ -142,6 +144,7 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.Bottom
                 ) {
+                    if(getCurrentDate()==carRecord.endRentDate)
                     Column {
                         Text(
                             text = "Видача: ${carRecord.startRentDate}"
@@ -207,4 +210,9 @@ fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit){
 
 
     }
+}
+
+
+fun getCurrentDate():String{
+    return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 }

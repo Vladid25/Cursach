@@ -84,6 +84,19 @@ fun AddTruckScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
 
+            var priceText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = priceText,
+                onValueChange = {
+                    priceText = it
+                },
+                label={
+                    Text(text = "Ціна")
+                },
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            )
+
             Button(onClick = {
                 if (brandText.text.isNotEmpty() && modelText.text.isNotEmpty() && yearText.text.isNotEmpty() && cargoCapacity.text.isNotEmpty()) {
                     val truck = Truck(
@@ -92,9 +105,10 @@ fun AddTruckScreen(
                         yearText.text.toInt(),
                         cargoCapacity = cargoCapacity.text.toDouble()
                     )
-                    val truckItem = TruckItem(truck,
-                        uploadDate = LocalDate.now().format(DateTimeFormatter
-                        .ofPattern("yyyy-MM-dd")))
+                    val truckItem = TruckItem(
+                        truck =truck,
+                        uploadDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        price = priceText.text.toDouble())
                     viewModel.addTruck(truckItem)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }
