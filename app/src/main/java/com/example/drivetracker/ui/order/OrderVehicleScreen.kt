@@ -1,6 +1,7 @@
 
 package com.example.drivetracker.ui.order
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.sharp.AccountCircle
+import androidx.compose.material.icons.sharp.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,13 +58,20 @@ fun OrderVehicleScreen(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TopVehicleBar(
     viewModel: OrderVehicleViewModel
 ) {
     val tabs = listOf("Cars", "Trucks")
+    var index = 0
+    if(viewModel.uiState.value.isTruck){
+        index = 1
+    }else{
+        index = 0
+    }
     var selectedTabIndex by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(index)
     }
     viewModel.changeVehicle(selectedTabIndex)
     TabRow(
@@ -107,6 +116,9 @@ fun BottomAppBarWithThreeSections(
                 }
                 IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
                     Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
+                }
+                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
+                    Icon(imageVector = Icons.Sharp.List, contentDescription = "Account")
                 }
             }
         }
