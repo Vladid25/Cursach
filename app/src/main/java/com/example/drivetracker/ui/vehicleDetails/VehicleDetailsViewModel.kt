@@ -51,8 +51,15 @@ class VehicleDetailsViewModel @Inject constructor(
     }
 
     fun updateCarItem(){
+        displayedCar.setRent()
         vehicleRepository.updateCarItem(displayedCar)
     }
+
+    fun updateCarPrice(price:Double){
+        displayedCar.setPrice(price)
+        vehicleRepository.updateCarItem(displayedCar)
+    }
+
 
     fun addTruckRecord(truckRecord: TruckRecord){
         vehicleRepository.addTruckRecord(truckRecord)

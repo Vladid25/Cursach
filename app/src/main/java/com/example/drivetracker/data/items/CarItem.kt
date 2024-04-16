@@ -42,4 +42,8 @@ class CarItem (
 
         return round(sum/comments.size.toDouble()*10)/10
     }
+
+    fun setPrice(price: Double){
+        this.price = price
+    }
 }

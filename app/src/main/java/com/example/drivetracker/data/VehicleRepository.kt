@@ -130,7 +130,6 @@ class VehicleRepository(
 
     fun updateCarItem(car: CarItem){
         deleteCar(car)
-        car.setRent()
         addCar(car)
     }
 

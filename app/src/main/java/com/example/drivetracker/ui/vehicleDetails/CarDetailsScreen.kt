@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -30,13 +32,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,16 +64,28 @@ fun CarDetailsScreen(
     deleteCar:()->Unit
 ){
     val dialogState = remember { mutableStateOf(false) }
+    val newPriceState = remember {
+        mutableStateOf(false)
+    }
     val car = viewModel.getDisplayedCar()
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
         Column{
-            Box {
-                Button(onClick = { navHostController.navigate(route = RentWheelsScreen.OrderVehicles.name)}) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
+            Row{
+                Row{
+                    Button(onClick = { navHostController.navigate(route = RentWheelsScreen.OrderVehicles.name)}) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
+                    }
+                }
+
+                Row{
+                    Button(onClick = { newPriceState.value = true}) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    }
                 }
             }
+
             Text(
                 text = car.car.brand+" "+ car.car.model,
                 fontSize = MaterialTheme.typography.displayMedium.fontSize,
@@ -118,6 +136,17 @@ fun CarDetailsScreen(
 
 
     }
+    if(newPriceState.value){
+        NewPriceDialog(
+            onDismiss = {
+            newPriceState.value = false
+        },
+            onSubmit = {
+                viewModel.updateCarPrice(it)
+                newPriceState.value = false
+            })
+    }
+
     if(dialogState.value){
         PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel)
     }
@@ -186,15 +215,47 @@ fun convertMillisToLocalDate(millis: Long) : LocalDate {
 @Composable
 fun DisplayComment(comment: Comment){
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
     ) {
         Text(text = comment.authorEmail + " " +comment.rating)
         Text(text = comment.text)
     }
 }
 
-@Preview
 @Composable
-fun CarDetailsScreenPreview(){
-    //CarDetailsScreen(car = CarRecord(car= Car("Porsche", "911", 2024, 2, 340.2), uploadDate = Date()))
+fun NewPriceDialog(
+    onDismiss: () -> Unit,
+    onSubmit: (Double) ->Unit
+){
+    var price by remember {
+        mutableStateOf(TextFieldValue())
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Нова ціна") },
+        text = {
+            TextField(
+                value = price,
+                onValueChange = { price = it },
+                label = { Text("Введіть нову ціну") }
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onSubmit(price.text.toDouble()) }
+            ) {
+                Text("Підтвердити")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick =  onDismiss
+            ) {
+                Text("Скасувати")
+            }
+        }
+    )
 }
+
