@@ -53,6 +53,7 @@ fun OrderVehicleScreen(
                     }
                 }
             }
+
         }
         BottomAppBarWithThreeSections(navHostController)
     }
@@ -117,8 +118,8 @@ fun BottomAppBarWithThreeSections(
                 IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
                     Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
                 }
-                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
-                    Icon(imageVector = Icons.Sharp.List, contentDescription = "Account")
+                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.StatsScreen.name) }) {
+                    Icon(imageVector = Icons.Sharp.List, contentDescription = "Stats")
                 }
             }
         }

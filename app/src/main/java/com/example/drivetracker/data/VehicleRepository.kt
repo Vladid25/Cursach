@@ -150,6 +150,28 @@ class VehicleRepository(
         addTruck(truck)
     }
 
+    fun getCarRecord(callback: (List<CarRecord>?) -> Unit) {
+        val list = mutableListOf<CarRecord>()
+        val ref = firebase.getReference("CarRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (carSnapshot in snapshot.children) {
+                    val car = carSnapshot.getValue(CarRecord::class.java)
+                    if (car != null) {
+                        list.add(car)
+                    }
+
+                }
+                callback(list)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
+
     fun getCarRecordByEmail(email: String, callback: (List<CarRecord>?) -> Unit) {
         val list = mutableListOf<CarRecord>()
         val ref = firebase.getReference("CarRecords")
@@ -163,6 +185,26 @@ class VehicleRepository(
                     }
                 }
                 callback(list)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
+    fun getTruckRecord(callback: (List<TruckRecord>?) -> Unit){
+        val list = mutableListOf<TruckRecord>()
+        val ref = firebase.getReference("TruckRecords")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (truckSnapshot in snapshot.children) {
+                    val truck = truckSnapshot.getValue(TruckRecord::class.java)
+                    if (truck != null) {
+                        list.add(truck)
+                    }
+                    callback(list)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

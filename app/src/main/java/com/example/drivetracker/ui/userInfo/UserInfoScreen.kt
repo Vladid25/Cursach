@@ -144,7 +144,7 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    if(getCurrentDate()==carRecord.endRentDate)
+                    //if(getCurrentDate()==carRecord.endRentDate)
                     Column {
                         Text(
                             text = "Видача: ${carRecord.startRentDate}"
