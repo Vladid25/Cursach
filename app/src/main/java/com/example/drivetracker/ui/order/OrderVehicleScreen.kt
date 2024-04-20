@@ -1,4 +1,3 @@
-
 package com.example.drivetracker.ui.order
 
 import android.annotation.SuppressLint
@@ -63,12 +62,12 @@ fun OrderVehicleScreen(
 fun TopVehicleBar(
     viewModel: OrderVehicleViewModel
 ) {
-    val tabs = listOf("Cars", "Trucks")
-    var index = 0
-    if(viewModel.uiState.value.isTruck){
-        index = 1
+    val tabs = listOf("Авто", "Вантажівки")
+    var index: Int = 0
+    index = if(viewModel.uiState.value.isTruck){
+        1
     }else{
-        index = 0
+        0
     }
     var selectedTabIndex by remember {
         mutableIntStateOf(index)
@@ -172,7 +171,7 @@ fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
                 Column {
                     Text(text = "★${carItem.getRating()}")
                     Text(text = carItem.car.year.toString()+"р.")
-                    Text(text = carItem.getPrice().toString()+" грн")
+                    Text(text = carItem.getCarPrice().toString()+" грн")
                 }
 
             }
@@ -217,7 +216,7 @@ fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
                 Column {
                     Text(text = "★${truckItem.getRating()}")
                     Text(text = truckItem.truck.year.toString()+"р.")
-                    Text(text = truckItem.getPrice().toString() + " грн")
+                    Text(text = truckItem.getCarPrice().toString() + " грн")
                 }
 
             }
@@ -240,16 +239,16 @@ fun PopupWithButtons(
             Column {
                 Text(text = "Виберіть тип транспорту:")
                 Button(onClick = { navHostController.navigate(RentWheelsScreen.AddCar.name) }) {
-                    Text(text = "Car")
+                    Text(text = "Авто")
                 }
                 Button(onClick = { navHostController.navigate(RentWheelsScreen.AddTruck.name) }) {
-                    Text(text = "Truck")
+                    Text(text = "Вантажівка")
                 }
             }
                },
         dismissButton = {
             Button(onClick = onDismiss){
-                Text(text = "Back")
+                Text(text = "Скасувати")
             }
         }
     )

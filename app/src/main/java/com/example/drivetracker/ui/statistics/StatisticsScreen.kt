@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
+import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.CustomBottomAppBar
 
 @Composable
@@ -32,7 +34,15 @@ fun StatisticScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(text = "Статистика")
+            Row{
+                Text(text = "Статистика")
+                Button(onClick = {
+                    viewModel.exit()
+                    navHostController.navigate(RentWheelsScreen.LogIn.name)
+                }) {
+                    Text(text = "Вийти")
+                }
+            }
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier
@@ -73,7 +83,8 @@ fun CarStats(carItem: CarItem, rentCount:Int){
             }
 
             Row(
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Кількість оренд: $rentCount")
             }
@@ -102,7 +113,8 @@ fun TruckStats(truckItem: TruckItem, rentCount:Int){
             }
 
             Row(
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Кількість оренд: $rentCount")
             }

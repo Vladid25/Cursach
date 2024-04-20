@@ -1,7 +1,6 @@
 package com.example.drivetracker.ui.vehicleDetails
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
@@ -56,12 +55,12 @@ class VehicleDetailsViewModel @Inject constructor(
     }
 
     fun updateCarPrice(price:Double){
-        displayedCar.setPrice(price)
+        displayedCar.setCarPrice(price)
         vehicleRepository.updateCarItem(displayedCar)
     }
 
     fun updateTruckPrice(price:Double){
-        displayedTruck.setPrice(price)
+        displayedTruck.setCarPrice(price)
         vehicleRepository.updateTruckItem(displayedTruck)
     }
 

@@ -97,4 +97,8 @@ class StatisticScreenViewModel @Inject constructor(
         return auth.currentUser?.email == "1@gmail.com"
     }
 
+    fun exit(){
+        auth.signOut()
+    }
+
 }
