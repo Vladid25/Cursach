@@ -32,8 +32,7 @@ import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
-import com.example.drivetracker.ui.RentWheelsScreen
-import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
+import com.example.drivetracker.ui.order.CustomBottomAppBar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -104,7 +103,7 @@ fun UserInfoScreen(
                 }
             }
         }
-        BottomAppBarWithThreeSections(navHostController)
+        CustomBottomAppBar(navHostController, viewModel.isAdmin())
 
     }
 }

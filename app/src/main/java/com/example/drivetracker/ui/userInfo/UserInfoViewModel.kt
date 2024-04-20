@@ -64,4 +64,8 @@ class UserInfoViewModel@Inject constructor(
     fun updateTruckRecord(truckRecord: TruckRecord){
         vehicleRepository.updateTruckRecord(truckRecord)
     }
+
+    fun isAdmin():Boolean{
+        return auth.currentUser?.email == "1@gmail.com"
+    }
 }

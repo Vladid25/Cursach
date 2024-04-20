@@ -15,12 +15,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
-import com.example.drivetracker.ui.order.BottomAppBarWithThreeSections
+import com.example.drivetracker.ui.order.CustomBottomAppBar
 
 @Composable
 fun StatisticScreen(
@@ -49,7 +48,7 @@ fun StatisticScreen(
                 }
             }
         }
-        BottomAppBarWithThreeSections(navHostController)
+        CustomBottomAppBar(navHostController, viewModel.isAdmin())
 
     }
 }
@@ -66,7 +65,9 @@ fun CarStats(carItem: CarItem, rentCount:Int){
         } else{
             "Вільна"
         }
-        Row{
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ){
             Row {
                 Text(text = text)
             }
@@ -86,13 +87,16 @@ fun TruckStats(truckItem: TruckItem, rentCount:Int){
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
+
         Text(text = truckItem.truck.brand+" "+truckItem.truck.model)
         val text = if(truckItem.isRented()){
             "Орендовано"
         } else{
             "Вільна"
         }
-        Row{
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ){
             Row {
                 Text(text = text)
             }

@@ -78,12 +78,14 @@ fun CarDetailsScreen(
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
                     }
                 }
-
-                Row{
-                    Button(onClick = { newPriceState.value = true}) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                if(viewModel.isAdmin()){
+                    Row{
+                        Button(onClick = { newPriceState.value = true}) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                        }
                     }
                 }
+
             }
 
             Text(
@@ -116,13 +118,15 @@ fun CarDetailsScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ){
-
-                Button(onClick = deleteCar) {
-                    Text(text = "Видалити")
+                if(viewModel.isAdmin()){
+                    Button(onClick = deleteCar) {
+                        Text(text = "Видалити")
+                    }
                 }
-
-                Button(onClick = { dialogState.value=true }) {
-                    Text(text = "Орендувати")
+                else{
+                    Button(onClick = { dialogState.value=true }) {
+                        Text(text = "Орендувати")
+                    }
                 }
             }
             LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {

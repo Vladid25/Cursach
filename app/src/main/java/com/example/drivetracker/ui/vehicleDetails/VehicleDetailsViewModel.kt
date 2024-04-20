@@ -60,12 +60,22 @@ class VehicleDetailsViewModel @Inject constructor(
         vehicleRepository.updateCarItem(displayedCar)
     }
 
+    fun updateTruckPrice(price:Double){
+        displayedTruck.setPrice(price)
+        vehicleRepository.updateTruckItem(displayedTruck)
+    }
+
 
     fun addTruckRecord(truckRecord: TruckRecord){
         vehicleRepository.addTruckRecord(truckRecord)
     }
 
     fun updateTruckItem(){
+        displayedTruck.setRent()
         vehicleRepository.updateTruckItem(displayedTruck)
+    }
+
+    fun isAdmin():Boolean{
+        return auth.currentUser?.email == "1@gmail.com"
     }
 }

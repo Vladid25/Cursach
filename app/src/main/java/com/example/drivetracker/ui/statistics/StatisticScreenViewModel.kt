@@ -6,10 +6,12 @@ import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class StatisticScreenViewModel @Inject constructor(
     private val vehicleRepository: VehicleRepository,
+    private val auth: FirebaseAuth
 ): ViewModel() {
     private var carList = mutableListOf<CarItem>()
     private var carRecordList = mutableListOf<CarRecord>()
@@ -89,6 +91,10 @@ class StatisticScreenViewModel @Inject constructor(
             }
         }
         return number
+    }
+
+    fun isAdmin():Boolean{
+        return auth.currentUser?.email == "1@gmail.com"
     }
 
 }

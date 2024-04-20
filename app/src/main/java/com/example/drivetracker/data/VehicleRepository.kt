@@ -146,7 +146,6 @@ class VehicleRepository(
 
     fun updateTruckItem(truck: TruckItem){
         deleteTruck(truck)
-        truck.setRent()
         addTruck(truck)
     }
 

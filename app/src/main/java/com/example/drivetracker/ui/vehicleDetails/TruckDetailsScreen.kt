@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +38,22 @@ fun TruckDetailsScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         val dialogState = remember { mutableStateOf(false) }
-
+        val newPriceState = remember {
+            mutableStateOf(false)
+        }
         Column{
-            Box {
-                Button(onClick = { navHostController.navigate(route = RentWheelsScreen.OrderVehicles.name)}) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
+            Row {
+                Row{
+                    Button(onClick = { navHostController.navigate(route = RentWheelsScreen.OrderVehicles.name)}) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Arrow back")
+                    }
+                }
+                if(viewModel.isAdmin()){
+                    Row{
+                        Button(onClick = { newPriceState.value = true}) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                        }
+                    }
                 }
             }
             Text(
@@ -70,18 +82,35 @@ fun TruckDetailsScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Button(onClick = deleteTruck) {
-                    Text(text = "Видалити")
+                if(viewModel.isAdmin()){
+                    Button(onClick = deleteTruck) {
+                        Text(text = "Видалити")
+                    }
+                } else{
+                    Button(onClick = { dialogState.value=true }) {
+                        Text(text = "Орендувати")
+                    }
                 }
-                Button(onClick = { dialogState.value=true }) {
-                    Text(text = "Орендувати")
-                }
+
+
             }
             LazyVerticalGrid(columns = GridCells.Adaptive(300.dp)) {
                 items(truck.comments){
                     DisplayComment(comment = it)
                 }
             }
+
+        }
+
+        if(newPriceState.value){
+            NewPriceDialog(
+                onDismiss = {
+                    newPriceState.value = false
+                },
+                onSubmit = {
+                    viewModel.updateTruckPrice(it)
+                    newPriceState.value = false
+                })
         }
         if(dialogState.value){
             PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel, isCar = false)

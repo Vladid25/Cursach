@@ -43,7 +43,7 @@ fun DriveTrackerApp(
         Firebase.auth
     }
     val orderViewModel = remember {
-        OrderVehicleViewModel(rep)
+        OrderVehicleViewModel(rep, auth)
     }
     val detailsViewModel = remember {
         VehicleDetailsViewModel(rep, auth)
@@ -55,7 +55,7 @@ fun DriveTrackerApp(
         CommentScreenViewModel(auth, rep)
     }
     val statisticScreenViewModel = remember {
-        StatisticScreenViewModel(rep)
+        StatisticScreenViewModel(rep, auth)
     }
     NavHost(
         navController = navHostController,

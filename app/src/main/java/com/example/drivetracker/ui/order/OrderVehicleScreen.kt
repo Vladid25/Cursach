@@ -26,13 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
-import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.ui.RentWheelsScreen
 
 @Composable
 fun OrderVehicleScreen(
     navHostController: NavHostController,
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) },
+    viewModel: OrderVehicleViewModel,
     onCarClicked:(CarItem)-> Unit,
     onTruckClicked:(TruckItem)->Unit
 ) {
@@ -55,7 +54,7 @@ fun OrderVehicleScreen(
             }
 
         }
-        BottomAppBarWithThreeSections(navHostController)
+        CustomBottomAppBar(navHostController, viewModel.isAdmin())
     }
 }
 
@@ -92,8 +91,9 @@ fun TopVehicleBar(
 }
 
 @Composable
-fun BottomAppBarWithThreeSections(
-    navHostController: NavHostController
+fun CustomBottomAppBar(
+    navHostController: NavHostController,
+    isAdmin: Boolean
 ) {
     val dialogState = remember { mutableStateOf(false) }
 
@@ -112,15 +112,21 @@ fun BottomAppBarWithThreeSections(
                 IconButton(onClick = {navHostController.navigate(RentWheelsScreen.OrderVehicles.name)}) {
                     Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
                 }
-                IconButton(onClick = { dialogState.value=true }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+
+                if(isAdmin){
+                    IconButton(onClick = { dialogState.value=true }) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    }
+                    IconButton(onClick = { navHostController.navigate(RentWheelsScreen.StatsScreen.name) }) {
+                        Icon(imageVector = Icons.Sharp.List, contentDescription = "Stats")
+                    }
+                }else{
+                    IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
+                        Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
+                    }
                 }
-                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
-                    Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
-                }
-                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.StatsScreen.name) }) {
-                    Icon(imageVector = Icons.Sharp.List, contentDescription = "Stats")
-                }
+
+
             }
         }
     }
