@@ -1,6 +1,7 @@
 package com.example.drivetracker.ui.auth
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +41,7 @@ fun SignInScreen(
     onLogInClick:() -> Unit,
     auth:FirebaseAuth
 ){
+    val context = LocalContext.current
     Surface(modifier = Modifier
         .fillMaxSize()) {
         Box(contentAlignment = Alignment.Center){
@@ -59,11 +62,11 @@ fun SignInScreen(
                         loginText = it
                     },
                     label={
-                        Text(text = "Enter email")
+                        Text(text = "Ел. пошта")
                     },
                     maxLines = 1,
                     supportingText = {
-                        Text(text = if(isError) "Error" else "")
+                        Text(text = if(isError) "Помилка" else "")
                     },
                 )
 
@@ -71,7 +74,7 @@ fun SignInScreen(
                     value = password,
                     onValueChange = { password = it },
                     singleLine = true,
-                    label = { Text("Enter password") },
+                    label = { Text("Пароль") },
                     visualTransformation =
                     if (passwordHidden1) PasswordVisualTransformation() else VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -84,7 +87,7 @@ fun SignInScreen(
                         }
                     },
                     supportingText = {
-                        Text(text = if(isError) "Error" else "")
+                        Text(text = if(isError) "Паролі не збігаються" else "")
                     },
                     maxLines = 1,
                     isError = isError
@@ -96,7 +99,7 @@ fun SignInScreen(
                     value = password2,
                     onValueChange = { password2 = it },
                     singleLine = true,
-                    label = { Text("Confirm password") },
+                    label = { Text("Підтвердіть пароль") },
                     visualTransformation =
                     if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -109,7 +112,7 @@ fun SignInScreen(
                         }
                     },
                     supportingText = {
-                        Text(text = if(isError) "Error" else "")
+                        Text(text = if(isError) "Паролі не збігаються" else "")
                     },
                     maxLines = 1,
                     isError = isError
@@ -117,16 +120,39 @@ fun SignInScreen(
 
                 Button(onClick = {
                      isError = password2!=password
+                    if(isError){
+                        return@Button
+                    }
+
+                    if(loginText.text.isEmpty()||password.isEmpty()){
+                        Toast.makeText(context, "Заповніть всі поля!", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    if(!loginText.text.contains('@')){
+                        Toast.makeText(context, "Неправильний формат пошти!", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    if(password.length<6){
+                        Toast.makeText(context, "Пароль має бути 6 або більше знаків!", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
                     auth.createUserWithEmailAndPassword(loginText.text, password).addOnCompleteListener {
                         if(it.isSuccessful){
                             onLogInClick.invoke()
                         } else {
-                            Log.e("", it.exception.toString())
+                            if(it.exception.toString().contains("network")){
+                                Toast.makeText(context, "Відсутнє підключення до інтернету!", Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(context, "Помилка!", Toast.LENGTH_SHORT).show()
+
+                            }
                         }
                     } },
                     modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)
                 ) {
-                    Text("Sign up")
+                    Text("Зареєстуватися")
                 }
                 Text(
                     "or",
@@ -135,7 +161,7 @@ fun SignInScreen(
                 )
                 Button(onClick = onLogInClick
                 ) {
-                    Text("Log in")
+                    Text("Увійти")
                 }
             }
         }

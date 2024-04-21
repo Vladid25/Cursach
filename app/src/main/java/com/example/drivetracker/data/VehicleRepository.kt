@@ -202,8 +202,10 @@ class VehicleRepository(
                     if (truck != null) {
                         list.add(truck)
                     }
-                    callback(list)
                 }
+                println(list.size)
+                callback(list)
+
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -86,7 +86,7 @@ class StatisticScreenViewModel @Inject constructor(
         fetchTruckRecords()
         var number=0
         for(item in truckRecordList){
-            if(truckItem.truck==item.truckItem.truck){
+            if(truckItem.truck.brand==item.truckItem.truck.brand){
                 number++
             }
         }

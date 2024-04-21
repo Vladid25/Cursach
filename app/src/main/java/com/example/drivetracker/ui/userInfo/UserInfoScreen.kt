@@ -89,7 +89,8 @@ fun UserInfoScreen(
                             viewModel.updateCarRecord(it)
                             viewModel.updateCar(it.carItem)
                             onCarClick.invoke(it.carItem)
-                        }
+                        },
+                        viewModel.isCarDateEnd(it)
                     )
                 }
                 items(truckList){
@@ -99,7 +100,9 @@ fun UserInfoScreen(
                             viewModel.updateTruckRecord(it)
                             viewModel.updateTruck(it.truckItem)
                             onTruckClick.invoke(it.truckItem)
-                        })
+                        },
+                        viewModel.isTruckDateEnd(it)
+                    )
                 }
             }
         }
@@ -115,7 +118,7 @@ fun UserInfoScreenPreview(){
 }
 
 @Composable
-fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
+fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit, isEnd:Boolean){
     Card(
         modifier = Modifier
             .padding(15.dp)
@@ -159,6 +162,10 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
             } ) {
                 Text(text = "Завершити")
             }
+
+            if(isEnd){
+                Text(text = "Термін оренди закінчився!!!!")
+            }
         }
         
 
@@ -166,7 +173,7 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit){
 }
 
 @Composable
-fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit){
+fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit, isEnd: Boolean){
     Card(
         modifier = Modifier
             .padding(15.dp)
@@ -204,6 +211,10 @@ fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit){
             }
             Button(onClick =onFinish) {
                 Text(text = "Завершити")
+            }
+
+            if(isEnd){
+                Text(text = "Термін оренди закінчився!!!!")
             }
         }
 
