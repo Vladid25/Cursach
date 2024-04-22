@@ -130,7 +130,7 @@ fun TruckStats(truckItem: TruckItem, viewModel: StatisticScreenViewModel){
             modifier = Modifier.fillMaxWidth()
         )
         val text = if(truckItem.isRented()){
-            "Орендовано"
+            "Орендовано: " +viewModel.getTruckOwner(truckItem)
         } else{
             "Вільна"
         }

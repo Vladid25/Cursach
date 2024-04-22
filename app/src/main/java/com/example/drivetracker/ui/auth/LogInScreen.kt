@@ -57,7 +57,7 @@ fun LogInScreen(
                         emailText = it
                     },
                     label={
-                        Text(text = "Enter email")
+                        Text(text = "Ел. пошта")
                     },
                     maxLines = 1
                 )
@@ -66,7 +66,7 @@ fun LogInScreen(
                     value = password,
                     onValueChange = { password = it },
                     singleLine = true,
-                    label = { Text("Enter password") },
+                    label = { Text("Пароль") },
                     visualTransformation =
                     if (passwordHidden1) PasswordVisualTransformation() else VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -110,7 +110,7 @@ fun LogInScreen(
                         }
                     },
                     modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)) {
-                    Text("Log in")
+                    Text("Увійти")
                 }
                 Text(
                     "or",
@@ -119,7 +119,7 @@ fun LogInScreen(
                 )
                 Button(onClick = onSignInClick
                 ) {
-                    Text("Sign up")
+                    Text("Зареєструватися")
                 }
             }
         }

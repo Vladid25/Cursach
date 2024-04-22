@@ -32,6 +32,7 @@ import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord
 import com.example.drivetracker.data.records.TruckRecord
+import com.example.drivetracker.ui.RentWheelsScreen
 import com.example.drivetracker.ui.order.CustomBottomAppBar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -72,7 +73,14 @@ fun UserInfoScreen(
                     )
                 }
             }
-
+            
+            Button(
+                onClick = { 
+                    viewModel.exit() 
+                    navHostController.navigate(RentWheelsScreen.LogIn.name)
+                }) {
+                Text(text = "Вийти")
+            }
             val carList = viewModel.getCarRecords()
             val truckList = viewModel.getTruckRecords()
 

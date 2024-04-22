@@ -71,7 +71,7 @@ fun TruckDetailsScreen(
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(
-                text = "Кількість місць: " + truck.truck.cargoCapacity,
+                text = "Вантажність: " + truck.truck.cargoCapacity,
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize
             )
             Text(
@@ -113,7 +113,7 @@ fun TruckDetailsScreen(
                 })
         }
         if(dialogState.value){
-            PopupCalendar(onDismiss = { dialogState.value=false }, navHostController = navHostController, viewModel, isCar = false)
+            PopupCalendar(onDismiss = { dialogState.value = false }, navHostController = navHostController, viewModel, isCar = false)
         }
     }
 

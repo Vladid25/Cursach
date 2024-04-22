@@ -104,7 +104,16 @@ class StatisticScreenViewModel @Inject constructor(
 
     fun getCarOwner(carItem: CarItem):String{
         for(item in carRecordList){
-            if(item.carItem.car==carItem.car){
+            if(item.carItem.car==carItem.car&&item.isActive){
+                return item.ownerEmail
+            }
+        }
+        return ""
+    }
+
+    fun getTruckOwner(truckItem: TruckItem):String{
+        for(item in truckRecordList){
+            if(item.truckItem.truck==truckItem.truck&&item.isActive){
                 return item.ownerEmail
             }
         }

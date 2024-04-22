@@ -80,4 +80,8 @@ class UserInfoViewModel@Inject constructor(
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return LocalDate.now().isAfter(LocalDate.parse(truckRecord.endRentDate, formatter))
     }
+
+    fun exit(){
+        auth.signOut()
+    }
 }
