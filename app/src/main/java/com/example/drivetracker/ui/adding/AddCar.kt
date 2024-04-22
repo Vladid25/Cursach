@@ -41,7 +41,7 @@ fun AddCarScreen(
                     brandText = it
                 },
                 label={
-                    Text(text = "Enter brand")
+                    Text(text = "Марка")
                 },
                 maxLines = 1
             )
@@ -52,7 +52,7 @@ fun AddCarScreen(
                     modelText = it
                 },
                 label={
-                    Text(text = "Enter model")
+                    Text(text = "Модель")
                 },
                 maxLines = 1
             )
@@ -64,7 +64,7 @@ fun AddCarScreen(
                     yearText = it
                 },
                 label={
-                    Text(text = "Enter year")
+                    Text(text = "Рік")
                 },
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -77,7 +77,7 @@ fun AddCarScreen(
                     numSeatsText = it
                 },
                 label={
-                    Text(text = "Enter number of seats")
+                    Text(text = "Кількість місць")
                 },
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -90,7 +90,7 @@ fun AddCarScreen(
                     maxSpeedText = it
                 },
                 label={
-                    Text(text = "Enter max speed")
+                    Text(text = "Макс. швидкість")
                 },
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -127,7 +127,7 @@ fun AddCarScreen(
                 }
             }
             ) {
-                Text(text = "Add")
+                Text(text = "Додати")
             }
         }
     }

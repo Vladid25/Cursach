@@ -12,10 +12,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
@@ -34,14 +36,28 @@ fun StatisticScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Row{
-                Text(text = "Статистика")
-                Button(onClick = {
-                    viewModel.exit()
-                    navHostController.navigate(RentWheelsScreen.LogIn.name)
-                }) {
-                    Text(text = "Вийти")
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Row(horizontalArrangement = Arrangement.Center){
+                    Text(
+                        text = "Статистика",
+                        fontSize = MaterialTheme.typography.headlineLarge.fontSize
+                    )
                 }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ){
+                    Button(onClick = {
+                        viewModel.exit()
+                        navHostController.navigate(RentWheelsScreen.LogIn.name)
+                    }) {
+                        Text(text = "Вийти")
+                    }
+                }
+
+
             }
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(300.dp),
@@ -50,11 +66,11 @@ fun StatisticScreen(
                     .padding(10.dp)
             ) {
                 items(viewModel.getCars()){
-                    CarStats(carItem = it, rentCount = viewModel.getNumberOfRent(it))
+                    CarStats(carItem = it, viewModel = viewModel)
                 }
 
                 items(viewModel.getTrucks()){
-                    TruckStats(truckItem = it, rentCount = viewModel.getNumberOfRent(it))
+                    TruckStats(truckItem = it, viewModel = viewModel)
                 }
             }
         }
@@ -64,18 +80,24 @@ fun StatisticScreen(
 }
 
 @Composable
-fun CarStats(carItem: CarItem, rentCount:Int){
+fun CarStats(carItem: CarItem, viewModel: StatisticScreenViewModel){
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp)
     ) {
-        Text(text = carItem.car.brand+" "+carItem.car.model)
-        var text = ""
-        text = if(carItem.isRented()){
-            "Орендовано"
+        Text(
+            text = carItem.car.brand+" "+carItem.car.model,
+            fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+        val text: String = if(carItem.isRented()){
+            "Орендовано: " + viewModel.getCarOwner(carItem)
         } else{
             "Вільна"
         }
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth()
         ){
             Row {
@@ -83,10 +105,10 @@ fun CarStats(carItem: CarItem, rentCount:Int){
             }
 
             Row(
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Кількість оренд: $rentCount")
+                Text(text = "Кількість оренд: ${viewModel.getNumberOfRent(carItem)}")
             }
 
         }
@@ -94,18 +116,25 @@ fun CarStats(carItem: CarItem, rentCount:Int){
 }
 
 @Composable
-fun TruckStats(truckItem: TruckItem, rentCount:Int){
+fun TruckStats(truckItem: TruckItem, viewModel: StatisticScreenViewModel){
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp)
     ) {
 
-        Text(text = truckItem.truck.brand+" "+truckItem.truck.model)
+        Text(
+            text = truckItem.truck.brand+" "+truckItem.truck.model,
+            fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
         val text = if(truckItem.isRented()){
             "Орендовано"
         } else{
             "Вільна"
         }
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth()
         ){
             Row {
@@ -113,10 +142,10 @@ fun TruckStats(truckItem: TruckItem, rentCount:Int){
             }
 
             Row(
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Кількість оренд: $rentCount")
+                Text(text = "Кількість оренд: ${viewModel.getNumberOfRent(truckItem)}")
             }
 
         }

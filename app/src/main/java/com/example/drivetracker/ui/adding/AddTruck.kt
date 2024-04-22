@@ -42,7 +42,7 @@ fun AddTruckScreen(
                     brandText = it
                 },
                 label={
-                    Text(text = "Enter brand")
+                    Text(text = "Марка")
                 },
                 maxLines = 1
             )
@@ -53,7 +53,7 @@ fun AddTruckScreen(
                     modelText = it
                 },
                 label={
-                    Text(text = "Enter model")
+                    Text(text = "Модель")
                 },
                 maxLines = 1
             )
@@ -65,7 +65,7 @@ fun AddTruckScreen(
                     yearText = it
                 },
                 label={
-                    Text(text = "Enter year")
+                    Text(text = "Рік")
                 },
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -78,7 +78,7 @@ fun AddTruckScreen(
                     cargoCapacity = it
                 },
                 label={
-                    Text(text = "Enter number of seats")
+                    Text(text = "Вантажність")
                 },
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -114,7 +114,7 @@ fun AddTruckScreen(
                 }
             }
             ) {
-                Text(text = "Add")
+                Text(text = "Додати")
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.drivetracker.ui.statistics
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.data.items.CarItem
@@ -100,5 +101,15 @@ class StatisticScreenViewModel @Inject constructor(
     fun exit(){
         auth.signOut()
     }
+
+    fun getCarOwner(carItem: CarItem):String{
+        for(item in carRecordList){
+            if(item.carItem.car==carItem.car){
+                return item.ownerEmail
+            }
+        }
+        return ""
+    }
+
 
 }
