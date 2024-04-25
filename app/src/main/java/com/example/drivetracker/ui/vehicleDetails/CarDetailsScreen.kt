@@ -41,6 +41,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +57,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.math.round
 
 @Composable
 fun CarDetailsScreen(
@@ -79,7 +81,10 @@ fun CarDetailsScreen(
                     }
                 }
                 if(viewModel.isAdmin()){
-                    Row{
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ){
                         Button(onClick = { newPriceState.value = true}) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
@@ -88,44 +93,60 @@ fun CarDetailsScreen(
 
             }
 
-            Text(
-                text = car.car.brand+" "+ car.car.model,
-                fontSize = MaterialTheme.typography.displayMedium.fontSize,
-                textAlign = TextAlign.Center,
-                modifier =  Modifier.fillMaxWidth()
-            )
-            Text(
-                text = "Рейтинг: " + car.getRating(),
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize
-            )
-            Text(
-                text = "Рік випуску: " + car.car.year,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize
-            )
-            Text(
-                text = "Кількість місць: " + car.car.numberSeats,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize
-            )
-            Text(
-                text = "Макс. швидкість: " + car.car.maxSpeed,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize
-            )
-            Text(
-                text = "Дата додавання: " + car.uploadDate,
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize
-            )
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                if(viewModel.isAdmin()){
-                    Button(onClick = deleteCar) {
-                        Text(text = "Видалити")
-                    }
-                }
-                else{
-                    Button(onClick = { dialogState.value=true }) {
-                        Text(text = "Орендувати")
+            Card(
+                modifier = Modifier
+                    .padding(start = 5.dp, end = 5.dp, top = 20.dp, bottom = 20.dp)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = car.car.brand+" "+ car.car.model,
+                        fontSize = MaterialTheme.typography.displayMedium.fontSize,
+                        textAlign = TextAlign.Center,
+                        modifier =  Modifier.fillMaxWidth()
+                    )
+                    Text(
+                        text = "Рейтинг: " + car.getRating()+ "★",
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+                    Text(
+                        text = "Рік випуску: " + car.car.year,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+                    Text(
+                        text = "Кількість місць: " + car.car.numberSeats,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+                    Text(
+                        text = "Макс. швидкість: " + round(car.car.maxSpeed),
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+                    Text(
+                        text = "Дата додавання: " + car.uploadDate,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        Column {
+                            Text(
+                                text = car.price.toString() +" грн/день",
+                                modifier = Modifier.padding(20.dp),
+                                fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                            )
+                            if(viewModel.isAdmin()){
+                                Button(onClick = deleteCar) {
+                                    Text(text = "Видалити")
+                                }
+                            }
+                            else{
+                                Button(onClick = { dialogState.value=true }) {
+                                    Text(text = "Орендувати")
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -135,10 +156,6 @@ fun CarDetailsScreen(
                 }
             }
         }
-        
-
-
-
     }
     if(newPriceState.value){
         NewPriceDialog(
@@ -223,7 +240,23 @@ fun DisplayComment(comment: Comment){
             .fillMaxWidth()
             .padding(10.dp)
     ) {
-        Text(text = comment.authorEmail + " " +comment.rating)
+        Row(
+            modifier = Modifier.padding(10.dp)
+        ){
+            Row{
+                Text(
+                    text = comment.authorEmail,
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(text = "${comment.rating}★")
+
+            }
+        }
         Text(text = comment.text)
     }
 }
