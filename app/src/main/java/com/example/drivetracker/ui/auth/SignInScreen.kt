@@ -52,7 +52,7 @@ fun SignInScreen(
                     mutableStateOf(false)
                 }
                 Text(
-                    text = "Sign up",
+                    text = "Реєстрація",
                     modifier = Modifier.padding(bottom = 75.dp),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize)
                 var loginText by remember { mutableStateOf(TextFieldValue()) }
@@ -155,7 +155,7 @@ fun SignInScreen(
                     Text("Зареєстуватися")
                 }
                 Text(
-                    "or",
+                    "або",
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     modifier = Modifier.padding(bottom = 25.dp)
                 )

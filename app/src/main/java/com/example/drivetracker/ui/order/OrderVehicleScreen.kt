@@ -39,7 +39,8 @@ fun OrderVehicleScreen(
         Column(Modifier.fillMaxSize()) {
             TopVehicleBar(viewModel)
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 300.dp)
+                columns = GridCells.Adaptive(minSize = 300.dp),
+                modifier = Modifier.padding(bottom = 20.dp)
             ) {
                 if (uiState.isTruck) {
                     items(viewModel.getEnableTrucks()) { truck ->

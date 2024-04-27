@@ -47,7 +47,7 @@ fun LogInScreen(
                 var password by rememberSaveable { mutableStateOf("") }
                 var passwordHidden1 by rememberSaveable { mutableStateOf(true) }
                 Text(
-                    text = "Log in",
+                    text = "Вхід",
                     modifier = Modifier.padding(bottom = 75.dp),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize)
                 var emailText by remember { mutableStateOf(TextFieldValue()) }
@@ -113,7 +113,7 @@ fun LogInScreen(
                     Text("Увійти")
                 }
                 Text(
-                    "or",
+                    "або",
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     modifier = Modifier.padding(bottom = 25.dp)
                 )
