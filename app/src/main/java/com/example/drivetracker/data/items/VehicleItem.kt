@@ -1,6 +1,6 @@
 package com.example.drivetracker.data.items
 
-import com.example.drivetracker.data.coments.Comment
+import com.example.drivetracker.data.comments.Comment
 import com.google.firebase.database.Exclude
 import kotlin.math.round
 

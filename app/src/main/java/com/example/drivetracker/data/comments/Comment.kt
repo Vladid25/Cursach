@@ -1,4 +1,4 @@
-package com.example.drivetracker.data.coments
+package com.example.drivetracker.data.comments
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

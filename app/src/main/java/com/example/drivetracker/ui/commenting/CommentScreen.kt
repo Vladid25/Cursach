@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.example.drivetracker.data.coments.Comment
+import com.example.drivetracker.data.comments.Comment
 import com.example.drivetracker.ui.RentWheelsScreen
 
 @Composable

@@ -1,7 +1,7 @@
 package com.example.drivetracker.data
 
 import android.util.Log
-import com.example.drivetracker.data.coments.Comment
+import com.example.drivetracker.data.comments.Comment
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.records.CarRecord

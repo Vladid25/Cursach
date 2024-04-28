@@ -1,8 +1,7 @@
 package com.example.drivetracker.data.items
 
-import com.example.drivetracker.data.coments.Comment
+import com.example.drivetracker.data.comments.Comment
 import com.example.drivetracker.data.entity.Truck
-import kotlin.math.round
 
 class TruckItem (
     val truck: Truck=Truck(),
