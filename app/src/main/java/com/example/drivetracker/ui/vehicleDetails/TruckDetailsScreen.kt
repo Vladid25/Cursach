@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.ui.RentWheelsScreen
 
@@ -72,7 +73,8 @@ fun TruckDetailsScreen(
                         text = truck.truck.brand+" "+ truck.truck.model,
                         fontSize = MaterialTheme.typography.displayMedium.fontSize,
                         textAlign = TextAlign.Center,
-                        modifier =  Modifier.fillMaxWidth()
+                        modifier =  Modifier.fillMaxWidth(),
+                        lineHeight = 40.sp
                     )
                     Text(
                         text = "★${truck.getRating()}",

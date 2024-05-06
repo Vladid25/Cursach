@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.comments.Comment
 import com.example.drivetracker.data.records.CarRecord
@@ -93,7 +94,8 @@ fun CarDetailsScreen(
                         text = car.car.brand+" "+ car.car.model,
                         fontSize = MaterialTheme.typography.displayMedium.fontSize,
                         textAlign = TextAlign.Center,
-                        modifier =  Modifier.fillMaxWidth()
+                        modifier =  Modifier.fillMaxWidth(),
+                        lineHeight = 40.sp
                     )
                     Text(
                         text = "Рейтинг: " + car.getRating()+ "★",

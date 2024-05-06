@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
@@ -153,14 +154,11 @@ fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
                     .padding(20.dp)
             ) {
                 Text(
-                    text = carItem.car.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    text = carItem.car.brand+" "+ carItem.car.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                    modifier =  Modifier.width(175.dp),
+                    lineHeight = 35.sp
                 )
-                Text(
-                    text = carItem.car.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-
             }
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -198,12 +196,10 @@ fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
                     .padding(20.dp)
             ) {
                 Text(
-                    text = truckItem.truck.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-                Text(
-                    text = truckItem.truck.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    text = truckItem.truck.brand+" " +truckItem.truck.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                    modifier =  Modifier.width(175.dp),
+                    lineHeight = 35.sp
                 )
 
             }
