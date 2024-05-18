@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.R
 import com.example.drivetracker.data.items.CarItem
@@ -139,12 +141,10 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit, isEnd:Boolean){
                         .padding(20.dp)
                 ) {
                     Text(
-                        text = carRecord.carItem.car.brand+" ",
-                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                    )
-                    Text(
-                        text = carRecord.carItem.car.model,
-                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                        text = carRecord.carItem.car.brand+" "+carRecord.carItem.car.model,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                        modifier =  Modifier.width(165.dp),
+                        lineHeight = 35.sp
                     )
                 }
                 Row(
@@ -159,7 +159,7 @@ fun DisplayCarRecord(carRecord: CarRecord, onFinish:()->Unit, isEnd:Boolean){
                         Text(
                             text = "Видача: ${carRecord.startRentDate}"
                         )
-                        Text(text = "Закінчення: ${carRecord.endRentDate}")
+                        Text(text = "Заверш. ${carRecord.endRentDate}")
                     }
 
                 }
@@ -194,14 +194,11 @@ fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit, isEnd: Boole
                         .padding(20.dp)
                 ) {
                     Text(
-                        text = truckRecord.truckItem.truck.brand+" ",
-                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                        text = truckRecord.truckItem.truck.brand+" "+truckRecord.truckItem.truck.model,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                        modifier =  Modifier.width(165.dp),
+                        lineHeight = 35.sp
                     )
-                    Text(
-                        text = truckRecord.truckItem.truck.model,
-                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                    )
-
                 }
                 Row(
                     horizontalArrangement = Arrangement.End,
@@ -212,7 +209,7 @@ fun DisplayTruckRecords(truckRecord: TruckRecord,onFinish:()->Unit, isEnd: Boole
                 ) {
                     Column {
                         Text(text = "Видача: ${truckRecord.startRentDate}")
-                        Text(text = "Завершення ${truckRecord.endRentDate}")
+                        Text(text = "Заверш. ${truckRecord.endRentDate}")
                     }
 
                 }

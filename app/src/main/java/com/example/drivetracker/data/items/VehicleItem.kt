@@ -8,7 +8,8 @@ open class VehicleItem(
     open val uploadDate: String="",
     open var rented:Boolean = false,
     open var comments:MutableList<Comment> = mutableListOf(),
-    open var price:Double=0.0
+    open var price:Double=0.0,
+    open val pledge:Double = 0.0
 ) {
     fun getCarPrice():Double{
         return price

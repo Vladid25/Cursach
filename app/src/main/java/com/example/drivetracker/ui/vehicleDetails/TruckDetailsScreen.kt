@@ -76,6 +76,12 @@ fun TruckDetailsScreen(
                         modifier =  Modifier.fillMaxWidth(),
                         lineHeight = 40.sp
                     )
+
+                    Text(
+                        text = "Номер: " + truck.truck.registrationNumber,
+                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    )
+
                     Text(
                         text = "★${truck.getRating()}",
                         fontSize = MaterialTheme.typography.headlineMedium.fontSize
@@ -96,17 +102,28 @@ fun TruckDetailsScreen(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
                     ){
-                        if(viewModel.isAdmin()){
-                            Button(onClick = deleteTruck) {
-                                Text(text = "Видалити")
+                        Column {
+                            Text(
+                                text = "Застава: ${truck.pledge} грн",
+                                modifier = Modifier.padding(20.dp),
+                                fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                            )
+                            Text(
+                                text = truck.price.toString() +" грн/день",
+                                modifier = Modifier.padding(20.dp),
+                                fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                            )
+                            if(viewModel.isAdmin()){
+                                Button(onClick = deleteTruck) {
+                                    Text(text = "Видалити")
+                                }
                             }
-                        } else{
-                            Button(onClick = { dialogState.value=true }) {
-                                Text(text = "Орендувати")
+                            else{
+                                Button(onClick = { dialogState.value=true }) {
+                                    Text(text = "Орендувати")
+                                }
                             }
                         }
-
-
                     }
                 }
             }

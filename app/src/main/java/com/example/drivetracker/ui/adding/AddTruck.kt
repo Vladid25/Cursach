@@ -83,6 +83,20 @@ fun AddTruckScreen(
                 maxLines = 1
             )
 
+            var regNumberText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = regNumberText,
+                onValueChange = {
+                    if(it.text.length<=8) {
+                        regNumberText = it
+                    }
+                },
+                label={
+                    Text(text = "Реєстраційний номер")
+                },
+                maxLines = 1
+            )
+
             var yearText by remember { mutableStateOf(TextFieldValue()) }
             OutlinedTextField(
                 value = yearText,
@@ -121,6 +135,18 @@ fun AddTruckScreen(
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
+            var pledgeText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = pledgeText,
+                onValueChange = {
+                    pledgeText = it
+                },
+                label={
+                    Text(text = "Застава")
+                },
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            )
 
             Button(onClick = {
                 if(yearText.text.toInt()>LocalDate.now().year||yearText.text.toInt()<1885){
@@ -140,13 +166,16 @@ fun AddTruckScreen(
                     val truck = Truck(
                         brand = brandText.text,
                         modelText.text,
-                        yearText.text.toInt(),
-                        cargoCapacity = cargoCapacity.text.toDouble()
+                        year = yearText.text.toInt(),
+                        cargoCapacity = cargoCapacity.text.toDouble(),
+                        registrationNumber = regNumberText.text
                     )
                     val truckItem = TruckItem(
                         truck =truck,
                         uploadDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                        price = priceText.text.toDouble())
+                        price = priceText.text.toDouble(),
+                        pledge = pledgeText.text.toDouble()
+                    )
                     viewModel.addTruck(truckItem)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }

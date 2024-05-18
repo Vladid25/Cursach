@@ -80,6 +80,18 @@ fun AddCarScreen(
                 maxLines = 1
             )
 
+            var regNumberText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = regNumberText,
+                onValueChange = {
+                    regNumberText = it
+                },
+                label={
+                    Text(text = "Реєстраційний номер")
+                },
+                maxLines = 1
+            )
+
             var yearText by remember { mutableStateOf(TextFieldValue()) }
             OutlinedTextField(
                 value = yearText,
@@ -132,13 +144,26 @@ fun AddCarScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
             )
 
+            var pledgeText by remember { mutableStateOf(TextFieldValue()) }
+            OutlinedTextField(
+                value = pledgeText,
+                onValueChange = {
+                    pledgeText = it
+                },
+                label={
+                    Text(text = "Застава")
+                },
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            )
+
             Button(onClick = {
                 if(yearText.text.toInt()>LocalDate.now().year||yearText.text.toInt()<1885){
                     Toast.makeText(context, "Рік випуску не відповідає дійсності!", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
 
-                if(numSeatsText.text.toInt()<=0||maxSpeedText.text.toDouble()<=0||priceText.text.toDouble()<=0){
+                if(numSeatsText.text.toInt()<=0||maxSpeedText.text.toDouble()<=0||priceText.text.toDouble()<=0||pledgeText.text.toDouble()<=0){
                     Toast.makeText(context, "Значення мають бути більше 0!", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
@@ -157,11 +182,14 @@ fun AddCarScreen(
                         yearText.text.toInt(),
                         numberSeats = numSeatsText.text.toInt(),
                         maxSpeed = maxSpeedText.text.toDouble(),
+                        registrationNumber = regNumberText.text
                     )
                     val carItem = CarItem(
                         car,
                         uploadDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                        price = priceText.text.toDouble())
+                        price = priceText.text.toDouble(),
+                        pledge = pledgeText.text.toDouble()
+                    )
                     viewModel.addCar(carItem)
                     navHostController.navigate(RentWheelsScreen.OrderVehicles.name)
                 }

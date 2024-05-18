@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.comments.Comment
@@ -36,9 +39,13 @@ fun CommentScreen(
         ) {
             var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
             var rating by remember { mutableIntStateOf(0) }
-
-            Text(text = "Дякуємо за користування\n Напишіть відгук, якщо бажаєте")
-
+            Text(
+                text = "Дякуємо за користування",
+                fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            Text(text = "Напишіть відгук, якщо бажаєте")
             OutlinedTextField(
                 value = textFieldValue,
                 onValueChange = {
@@ -53,6 +60,8 @@ fun CommentScreen(
                     }
                 }
             }
+
+            Text(text = "$rating★")
 
             Row {
                 Button(onClick = { navHostController.navigate(RentWheelsScreen.OrderVehicles.name) }) {

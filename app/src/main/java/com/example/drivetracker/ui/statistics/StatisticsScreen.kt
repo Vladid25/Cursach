@@ -63,7 +63,7 @@ fun StatisticScreen(
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier
                     .height(1000.dp)
-                    .padding(bottom = 30.dp)
+                    .padding(bottom = 80.dp)
             ) {
                 items(viewModel.getCars()){
                     CarStats(carItem = it, viewModel = viewModel)
