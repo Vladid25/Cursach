@@ -2,6 +2,7 @@
 
 package com.example.drivetracker.ui.vehicleDetails
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -173,7 +175,7 @@ fun PopupCalendar(
 ) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -181,6 +183,10 @@ fun PopupCalendar(
                 if(datePickerState.selectedDateMillis!=null){
                     selectedDate= convertMillisToLocalDate(datePickerState.selectedDateMillis!!)
                     println(selectedDate)
+                    if(selectedDate.isBefore(LocalDate.now())){
+                        Toast.makeText(context, "Введіть майбутню дату!", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
                     if(isCar){
                         viewModel.updateCarItem()
                         val carRecord = CarRecord(carItem = viewModel.getDisplayedCar(), ownerEmail = viewModel.getUserEmail(),
@@ -237,7 +243,7 @@ fun DisplayComment(comment: Comment){
             Row{
                 Text(
                     text = comment.authorEmail,
-                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                    fontSize = MaterialTheme.typography.headlineSmall.fontSize
                 )
             }
             Row(
@@ -248,7 +254,10 @@ fun DisplayComment(comment: Comment){
 
             }
         }
-        Text(text = comment.text)
+        Text(
+            text = comment.text,
+            modifier = Modifier.padding(10.dp)
+        )
     }
 }
 
