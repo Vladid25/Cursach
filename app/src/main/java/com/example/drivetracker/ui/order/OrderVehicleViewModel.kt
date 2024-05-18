@@ -5,6 +5,7 @@ import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
 import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.model.OrderVehicleUiState
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class OrderVehicleViewModel @Inject constructor(
-    private val vehicleRepository: VehicleRepository
+    private val vehicleRepository: VehicleRepository,
+    private val auth: FirebaseAuth
 ):ViewModel() {
     private val _uiState = MutableStateFlow(OrderVehicleUiState())
     val uiState:StateFlow<OrderVehicleUiState> = _uiState.asStateFlow()
@@ -70,7 +72,7 @@ class OrderVehicleViewModel @Inject constructor(
                 enableTruckList.add(item)
             }
         }
-        return truckList
+        return enableTruckList
     }
 
     fun addCar(car: CarItem){
@@ -79,6 +81,10 @@ class OrderVehicleViewModel @Inject constructor(
 
     fun addTruck(truck: TruckItem){
         vehicleRepository.addTruck(truck)
+    }
+
+    fun isAdmin():Boolean{
+        return auth.currentUser?.email=="1@gmail.com"
     }
 
 }

@@ -8,9 +8,13 @@ class TruckRecord(
     val truckItem: TruckItem = TruckItem(),
     val ownerEmail:String="",
     val startRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-    val endRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val endRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+    var isActive:Boolean = true
 ){
     init {
         truckItem.setRent()
+    }
+    fun setPassive(){
+        isActive = false
     }
 }

@@ -8,9 +8,15 @@ class CarRecord(
     val carItem: CarItem = CarItem(),
     val ownerEmail:String="",
     val startRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-    val endRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val endRentDate: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+    var isActive:Boolean = true
 ){
     init {
         carItem.setRent()
     }
+
+    fun setPassive(){
+        isActive = false
+    }
+
 }

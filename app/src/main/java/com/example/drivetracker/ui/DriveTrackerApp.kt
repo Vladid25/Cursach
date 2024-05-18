@@ -14,8 +14,12 @@ import com.example.drivetracker.ui.adding.AddCarScreen
 import com.example.drivetracker.ui.adding.AddTruckScreen
 import com.example.drivetracker.ui.auth.LogInScreen
 import com.example.drivetracker.ui.auth.SignInScreen
+import com.example.drivetracker.ui.commenting.CommentScreen
+import com.example.drivetracker.ui.commenting.CommentScreenViewModel
 import com.example.drivetracker.ui.order.OrderVehicleScreen
 import com.example.drivetracker.ui.order.OrderVehicleViewModel
+import com.example.drivetracker.ui.statistics.StatisticScreen
+import com.example.drivetracker.ui.statistics.StatisticScreenViewModel
 import com.example.drivetracker.ui.userInfo.UserInfoScreen
 import com.example.drivetracker.ui.userInfo.UserInfoViewModel
 import com.example.drivetracker.ui.vehicleDetails.CarDetailsScreen
@@ -39,13 +43,19 @@ fun DriveTrackerApp(
         Firebase.auth
     }
     val orderViewModel = remember {
-        OrderVehicleViewModel(rep)
+        OrderVehicleViewModel(rep, auth)
     }
     val detailsViewModel = remember {
         VehicleDetailsViewModel(rep, auth)
     }
     val userInfoViewModel= remember {
         UserInfoViewModel(rep,auth)
+    }
+    val commentScreenViewModel = remember {
+        CommentScreenViewModel(auth, rep)
+    }
+    val statisticScreenViewModel = remember {
+        StatisticScreenViewModel(rep, auth)
     }
     NavHost(
         navController = navHostController,
@@ -116,7 +126,28 @@ fun DriveTrackerApp(
         composable(route = RentWheelsScreen.MyVehicles.name){
             UserInfoScreen(
                 navHostController = navHostController,
-                viewModel = userInfoViewModel
+                viewModel = userInfoViewModel,
+                onCarClick = {
+                    commentScreenViewModel.setCar(it)
+                    navHostController.navigate(RentWheelsScreen.CommentScreen.name)
+                },
+                onTruckClick = {
+                    commentScreenViewModel.setTruck(it)
+                    navHostController.navigate(RentWheelsScreen.CommentScreen.name)
+                }
+            )
+        }
+        composable(route = RentWheelsScreen.CommentScreen.name){
+            CommentScreen(
+                viewModel = commentScreenViewModel,
+                navHostController = navHostController
+            )
+        }
+
+        composable(route = RentWheelsScreen.StatsScreen.name){
+            StatisticScreen(
+                viewModel =statisticScreenViewModel ,
+                navHostController = navHostController
             )
         }
     }
@@ -131,5 +162,7 @@ enum class RentWheelsScreen{
     AddCar,
     AddTruck,
     CarDetails,
-    TruckDetails
+    TruckDetails,
+    CommentScreen,
+    StatsScreen
 }

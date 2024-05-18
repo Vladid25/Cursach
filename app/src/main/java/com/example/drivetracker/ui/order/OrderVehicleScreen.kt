@@ -1,6 +1,6 @@
-
 package com.example.drivetracker.ui.order
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.sharp.AccountCircle
+import androidx.compose.material.icons.sharp.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,16 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.drivetracker.data.items.CarItem
 import com.example.drivetracker.data.items.TruckItem
-import com.example.drivetracker.data.VehicleRepository
 import com.example.drivetracker.ui.RentWheelsScreen
 
 @Composable
 fun OrderVehicleScreen(
     navHostController: NavHostController,
-    viewModel: OrderVehicleViewModel = remember { OrderVehicleViewModel(VehicleRepository()) },
+    viewModel: OrderVehicleViewModel,
     onCarClicked:(CarItem)-> Unit,
     onTruckClicked:(TruckItem)->Unit
 ) {
@@ -39,7 +40,8 @@ fun OrderVehicleScreen(
         Column(Modifier.fillMaxSize()) {
             TopVehicleBar(viewModel)
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 300.dp)
+                columns = GridCells.Adaptive(minSize = 300.dp),
+                modifier = Modifier.padding(bottom = 80.dp)
             ) {
                 if (uiState.isTruck) {
                     items(viewModel.getEnableTrucks()) { truck ->
@@ -51,18 +53,26 @@ fun OrderVehicleScreen(
                     }
                 }
             }
+
         }
-        BottomAppBarWithThreeSections(navHostController)
+        CustomBottomAppBar(navHostController, viewModel.isAdmin())
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TopVehicleBar(
     viewModel: OrderVehicleViewModel
 ) {
-    val tabs = listOf("Cars", "Trucks")
+    val tabs = listOf("Авто", "Вантажівки")
+    var index: Int = 0
+    index = if(viewModel.uiState.value.isTruck){
+        1
+    }else{
+        0
+    }
     var selectedTabIndex by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(index)
     }
     viewModel.changeVehicle(selectedTabIndex)
     TabRow(
@@ -82,8 +92,9 @@ fun TopVehicleBar(
 }
 
 @Composable
-fun BottomAppBarWithThreeSections(
-    navHostController: NavHostController
+fun CustomBottomAppBar(
+    navHostController: NavHostController,
+    isAdmin: Boolean
 ) {
     val dialogState = remember { mutableStateOf(false) }
 
@@ -102,12 +113,21 @@ fun BottomAppBarWithThreeSections(
                 IconButton(onClick = {navHostController.navigate(RentWheelsScreen.OrderVehicles.name)}) {
                     Icon(imageVector = Icons.Default.Home, contentDescription = "Home")
                 }
-                IconButton(onClick = { dialogState.value=true }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+
+                if(isAdmin){
+                    IconButton(onClick = { dialogState.value=true }) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    }
+                    IconButton(onClick = { navHostController.navigate(RentWheelsScreen.StatsScreen.name) }) {
+                        Icon(imageVector = Icons.Sharp.List, contentDescription = "Stats")
+                    }
+                }else{
+                    IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
+                        Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
+                    }
                 }
-                IconButton(onClick = { navHostController.navigate(RentWheelsScreen.MyVehicles.name) }) {
-                    Icon(imageVector = Icons.Sharp.AccountCircle, contentDescription = "Account")
-                }
+
+
             }
         }
     }
@@ -134,14 +154,11 @@ fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
                     .padding(20.dp)
             ) {
                 Text(
-                    text = carItem.car.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    text = carItem.car.brand+" "+ carItem.car.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                    modifier =  Modifier.width(175.dp),
+                    lineHeight = 35.sp
                 )
-                Text(
-                    text = carItem.car.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-
             }
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -151,8 +168,9 @@ fun DisplayCar(carItem: CarItem, onCarClicked: (CarItem) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${carItem.rating}")
-                    Text(text = carItem.car.year.toString())
+                    Text(text = "★${carItem.getRating()}")
+                    Text(text = carItem.car.year.toString()+"р.")
+                    Text(text = carItem.getCarPrice().toString()+" грн")
                 }
 
             }
@@ -178,12 +196,10 @@ fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
                     .padding(20.dp)
             ) {
                 Text(
-                    text = truckItem.truck.brand+" ",
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                )
-                Text(
-                    text = truckItem.truck.model,
-                    fontSize = MaterialTheme.typography.headlineMedium.fontSize
+                    text = truckItem.truck.brand+" " +truckItem.truck.model,
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                    modifier =  Modifier.width(175.dp),
+                    lineHeight = 35.sp
                 )
 
             }
@@ -195,8 +211,9 @@ fun DisplayTruck(truckItem: TruckItem, onTruckClicked: (TruckItem) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text(text = "Rating: ${truckItem.rating}")
-                    Text(text = truckItem.truck.year.toString())
+                    Text(text = "★${truckItem.getRating()}")
+                    Text(text = truckItem.truck.year.toString()+"р.")
+                    Text(text = truckItem.getCarPrice().toString() + " грн")
                 }
 
             }
@@ -219,16 +236,16 @@ fun PopupWithButtons(
             Column {
                 Text(text = "Виберіть тип транспорту:")
                 Button(onClick = { navHostController.navigate(RentWheelsScreen.AddCar.name) }) {
-                    Text(text = "Car")
+                    Text(text = "Авто")
                 }
                 Button(onClick = { navHostController.navigate(RentWheelsScreen.AddTruck.name) }) {
-                    Text(text = "Truck")
+                    Text(text = "Вантажівка")
                 }
             }
                },
         dismissButton = {
             Button(onClick = onDismiss){
-                Text(text = "Back")
+                Text(text = "Скасувати")
             }
         }
     )

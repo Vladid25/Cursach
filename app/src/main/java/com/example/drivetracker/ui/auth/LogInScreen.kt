@@ -1,5 +1,6 @@
 package com.example.drivetracker.ui.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -37,6 +39,7 @@ fun LogInScreen(
     auth:FirebaseAuth,
     onLogInClick: ()->Unit
 ){
+    val context = LocalContext.current
     Surface(modifier = Modifier
         .fillMaxSize()) {
         Box(contentAlignment = Alignment.Center){
@@ -44,7 +47,7 @@ fun LogInScreen(
                 var password by rememberSaveable { mutableStateOf("") }
                 var passwordHidden1 by rememberSaveable { mutableStateOf(true) }
                 Text(
-                    text = "Log in",
+                    text = "Вхід",
                     modifier = Modifier.padding(bottom = 75.dp),
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize)
                 var emailText by remember { mutableStateOf(TextFieldValue()) }
@@ -54,7 +57,7 @@ fun LogInScreen(
                         emailText = it
                     },
                     label={
-                        Text(text = "Enter email")
+                        Text(text = "Ел. пошта")
                     },
                     maxLines = 1
                 )
@@ -63,7 +66,7 @@ fun LogInScreen(
                     value = password,
                     onValueChange = { password = it },
                     singleLine = true,
-                    label = { Text("Enter password") },
+                    label = { Text("Пароль") },
                     visualTransformation =
                     if (passwordHidden1) PasswordVisualTransformation() else VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -79,23 +82,44 @@ fun LogInScreen(
                 )
                 Button(
                     onClick ={
+                        if(emailText.text.isEmpty()||password.isEmpty()){
+                            Toast.makeText(context, "Заповніть всі поля!", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+
+                        if(!emailText.text.contains('@')){
+                            Toast.makeText(context, "Неправильний формат пошти!", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+
+                        if(password.length<6){
+                            Toast.makeText(context, "Пароль має бути 6 або більше знаків!", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
                         auth.signInWithEmailAndPassword(emailText.text, password).addOnCompleteListener{
                             if(it.isSuccessful){
                                 onLogInClick.invoke()
+                            }else{
+                                if(it.exception.toString().contains("network")){
+                                    Toast.makeText(context, "Відсутнє підключення до інтернету!", Toast.LENGTH_SHORT).show()
+                                }else{
+                                    Toast.makeText(context, "Такий користувач відсутній!", Toast.LENGTH_SHORT).show()
+
+                                }
                             }
                         }
                     },
                     modifier = Modifier.padding(top = 50.dp, bottom = 25.dp)) {
-                    Text("Log in")
+                    Text("Увійти")
                 }
                 Text(
-                    "or",
+                    "або",
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                     modifier = Modifier.padding(bottom = 25.dp)
                 )
                 Button(onClick = onSignInClick
                 ) {
-                    Text("Sign up")
+                    Text("Зареєструватися")
                 }
             }
         }
